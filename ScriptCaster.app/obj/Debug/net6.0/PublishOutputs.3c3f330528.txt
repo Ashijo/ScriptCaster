@@ -1,0 +1,8 @@
+/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/ScriptCaster.app
+/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/ScriptCaster.app.dll
+/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/ScriptCaster.app.deps.json
+/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/ScriptCaster.app.runtimeconfig.json
+/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/ScriptCaster.app.pdb
+/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/Newtonsoft.Json.dll
+/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/ScriptCaster.services.dll
+/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/ScriptCaster.services.pdb
