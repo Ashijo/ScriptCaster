@@ -7,15 +7,15 @@ namespace ScriptCaster.app
     /*
     Cast shall read the template, the local variable file and the global variable file
     variable files are json dictionarie <string,string>, every occurence of the key shall be replace by the value
-    some default key also exist:
-    %DATE% : DateTime.Now
-    %DATEUTC% : DateTime.UtcNow
-    %NEWGUID%
-    
+    TODO: default key to add:
+        %NEWGUID%
+        %DATE% and co
+
+    TODO: find a way to format dates
 
     Nice to have :
-    Logical variable : use reflexion to execute a C# function define in other variable script
-    Bash variable : set variable as the result of a bash command
+        Logical variable : use reflexion to execute a C# function define in other variable script
+        Bash variable : set variable as the result of a bash command
     */
     public static class Cast
     {
