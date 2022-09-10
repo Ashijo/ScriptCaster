@@ -22,11 +22,38 @@ namespace ScriptCaster.app
         static int depth = 0;
 
         public static void LaunchCast() {
+            if (!Context.Instance.Initiated) return;
+
             var variables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
                 File.ReadAllText(Context.Instance.GlobalVariablePath));
 
-            variables?.AddRangeOverride(JsonConvert.DeserializeObject<Dictionary<string, string>>(
-                File.ReadAllText(Context.Instance.TemplateVariablePath)));
+            var templateVariables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
+                File.ReadAllText(Context.Instance.TemplateVariablePath));
+
+            //TODO Refactoring: Move this validation somewhere else 
+            if(variables == null || templateVariables == null) {
+                var fileNotExistsInGlobal = variables == null;
+                var fileNotExistsInTemplate = templateVariables == null;
+
+                var fileNotExistsInGlobalMsg = $"global folder ({Context.Instance.GlobalVariablePath}) ";
+                var fileNotExistsInTemplateMsg = $"template folder ({Context.Instance.TemplateVariablePath}) ";
+
+                var fileNotExistsIn = fileNotExistsInGlobal ? 
+                    ( fileNotExistsInTemplate ? 
+                        $"{fileNotExistsInGlobalMsg} and {fileNotExistsInTemplateMsg}" 
+                        : fileNotExistsInGlobalMsg
+                    ) : fileNotExistsInTemplateMsg;
+
+                if(variables == null && templateVariables == null) {
+                }
+
+                Logger.LogError($".variables.json does not exists {fileNotExistsIn}.");
+                Logger.LogWarning("You can create it running :");
+                Logger.Log($"   sc {(fileNotExistsInTemplate ? "<TemplateName>" : "")} -{(fileNotExistsInGlobal ? "g" : "")}{(fileNotExistsInTemplate ? "t" : "")}", ConsoleColor.Cyan);
+                return;
+            }
+
+            variables?.AddRangeOverride(templateVariables);
 
             CreateFolders(variables);
             var filesInTemplate = GetAllFiles();
@@ -38,19 +65,11 @@ namespace ScriptCaster.app
                     .Replace("\n", "");
 
                 if(File.Exists(rFilePath)) {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"{rFilePath} already exist. Ignored. Soon(~ish) force option will be add.");
-                    Console.ResetColor();
+                    Logger.LogWarning($"{rFilePath} already exist. Ignored. Soon(~ish) force option will be add.");
                     continue;
                 }
 
                 var fileContent = File.ReadAllText(tFilePath);
-
-                if(fileContent.Length > 0) {
-                    Console.WriteLine("There is something in file content");
-                } else {
-                    Console.WriteLine("File content empty");
-                }
 
                 
                 for(int i = 0; i < Context.Instance.Recursivity; i++) {
@@ -58,12 +77,6 @@ namespace ScriptCaster.app
                         rFilePath = rFilePath.Replace(kv.Key, kv.Value);
                         fileContent = fileContent.Replace(kv.Key, kv.Value);
                     }
-                }
-
-                if(fileContent.Length > 0) {
-                    Console.WriteLine("There is something in file content after mapping");
-                } else {
-                    Console.WriteLine("File content empty after mapping");
                 }
 
                 using (var stream = File.CreateText(rFilePath)){
@@ -114,7 +127,6 @@ namespace ScriptCaster.app
         //There is a way to merge GetAllFolder and GetAllFile
         //It would be a lot better optimization wize
         //But also harder to read
-
         private static string[] GetAllFiles() {
             return GetFilesFromParent(Context.Instance.TemplatePath);
         }

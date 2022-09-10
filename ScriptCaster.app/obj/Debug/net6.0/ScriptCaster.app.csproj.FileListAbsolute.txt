@@ -36,3 +36,4 @@
 /home/ashijo/Git/ScriptCaster/ScriptCaster.app/obj/Debug/net6.0/ScriptCaster.app.pdb
 /home/ashijo/Git/ScriptCaster/ScriptCaster.app/obj/Debug/net6.0/ScriptCaster.app.genruntimeconfig.cache
 /home/ashijo/Git/ScriptCaster/ScriptCaster.app/obj/Debug/net6.0/ref/ScriptCaster.app.dll
+/home/ashijo/Git/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/McMaster.Extensions.CommandLineUtils.dll

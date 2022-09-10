@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "s0L1KPfKgAyMfGMVXqIwQbcXH5jcGsc2Yf/aPcgRxWRqLJtldw14zNDiTEB4QoTGebpB4K9p88ZZcreSMJNM1g==",
+  "dgSpecHash": "PQo58UZ3heF6f4E5gdwUZPwc3wAtqIQHu0jrbNIKD6fsnyvy/nFFtMgmjUUGFYOuA8M9Cx5SK9RQIAc6W6cZ/Q==",
   "success": true,
   "projectFilePath": "/home/ashijo/Git/ScriptCaster/ScriptCaster.app/ScriptCaster.app.csproj",
   "expectedPackageFiles": [
+    "/home/ashijo/.nuget/packages/mcmaster.extensions.commandlineutils/4.0.1/mcmaster.extensions.commandlineutils.4.0.1.nupkg.sha512",
     "/home/ashijo/.nuget/packages/newtonsoft.json/13.0.1/newtonsoft.json.13.0.1.nupkg.sha512",
+    "/home/ashijo/.nuget/packages/system.componentmodel.annotations/5.0.0/system.componentmodel.annotations.5.0.0.nupkg.sha512",
     "/home/ashijo/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.8/microsoft.aspnetcore.app.ref.6.0.8.nupkg.sha512"
   ],
   "logs": []
