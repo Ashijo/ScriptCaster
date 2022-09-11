@@ -38,21 +38,22 @@ namespace ScriptCaster.app
 
         //TODO: the template path shall also be a config in ~/.config/ScriptCatser/config
         //TODO: Recursivity shall also be a config
-        public void InitContext(string? templateName, string templatesFolderPath, int recursivity) {
+        public void InitContext(string? templateName, string templatesCollectionPath, int recursivity) {
             if (templateName == null) return;
 
             TemplateName = templateName;
 
-            if(!Directory.Exists(templatesFolderPath)) {
-                Logger.LogError($"{templatesFolderPath} does not exist");
+            if(!Directory.Exists(templatesCollectionPath)) {
+                Logger.LogError($"{templatesCollectionPath} does not exist");
                 Logger.LogError($"   this is the folder that should contain all the templates");
                 Logger.LogError($"   please create the folder then try create a new template with :");
                 Logger.Log($"      sc {templateName} -c", ConsoleColor.Cyan);
                 return;
             }
 
-            TemplatePath = $"{templatesFolderPath}/{templateName}";
-            
+            TemplatePath = $"{templatesCollectionPath}/{templateName}";
+
+
             if(!Directory.Exists(TemplatePath)) {
                 Logger.LogError($"{TemplatePath} does not exist");
                 Logger.LogError($"   this is the folder that contain the template and local information about it");
@@ -65,26 +66,26 @@ namespace ScriptCaster.app
             TemplateVariablePath = $"{TemplatePath}/.variables.json";
 
             LocalPath = ScriptCaster.Services.Process.GetPwd();
-            GlobalVariablePath = $"{templatesFolderPath}/.variables.json";
+            GlobalVariablePath = $"{templatesCollectionPath}/.variables.json";
             Recursivity = recursivity;
 
             Initiated = true;
         }
 
-        public void ListTemplates(string path) {
-            var templateList = ScriptCaster.Services.Process.GetAllFilesAndFolders(path).Where(n => Directory.Exists(n));
+        public void ListTemplates(string templatesCollectionPath) {
+            var templateList = ScriptCaster.Services.Process.GetAllFilesAndFolders(templatesCollectionPath)
+            .Where(n => Directory.Exists($"{templatesCollectionPath}/{n}"));
 
             Console.WriteLine($"I found {templateList.Count()} template{(templateList.Count() > 1 ? "s" : "")} :");
 
             foreach(var template in templateList) {
-                var segmentedTemplatePath = template.Split("/");
-                var templateName = segmentedTemplatePath[segmentedTemplatePath.Count() - 1];
-                Console.WriteLine($"   - {templateName}");
+                Console.WriteLine($"   - {template}");
             }
 
-            Console.WriteLine();
-            Console.WriteLine("   Do not forget that only folders will be considered as template.");
-            Console.WriteLine("If you whant just a file, touch it in a folder");
+            if(templateList.Count() == 0 ){
+                Console.WriteLine("   Do not forget that only folders will be considered as template.");
+                Console.WriteLine("If you whant just a file, touch it in a folder");
+            }
         }
     }
 }

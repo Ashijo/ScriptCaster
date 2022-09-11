@@ -10,7 +10,7 @@ class Program {
     static void Main(string[] args) => CommandLineApplication.Execute<Program>(args);
 
 
-    [Argument(0, Name = "Template name", Description = "The name of the template we have to work with")]
+    [Argument(0, Name = "TemplateName", Description = "The name of the template we have to work with")]
     private string? TemplateName { get; }
 
     [Option("-t|--template", Description = "Update the variables files of the template")]
@@ -19,19 +19,19 @@ class Program {
     [Option("-g|--global", Description = "Update the global variables files")]
     public bool GlobalVariableUpdate { get; } = false;
 
-    [Option(Description = "List of templates I find")]
+    [Option(Description = "List of all templates")]
     public bool List { get; } = false;
 
-    //IDEA: Create template from other template ??   
+    //IDEA: Create template from other template ?    
     [Option(Description = "Create a new empty template")]
     public bool Create { get; } = false;
 
     //TODO: get the default recursivity from .config
-    [Option(Description = "The number of time parsing will be done on every text, bigger it is the more depth you can have in variables references (default = 3)")]
+    [Option(Description = "The number of time parsing will be done on every text, bigger it is the more depth you can have in variables references")]
     public int Recursivity {get;} = 3;
 
     //TODO: get the default path from .config
-    [Option("-p|--path", Description="Path of the folder containing the template (default = ~/Templates)")]
+    [Option("-p|--path", Description="Path of the folder containing the template")]
     public string TemplatesFolderPath { get; } = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/Templates";
 
     void OnExecute() { 
@@ -57,8 +57,6 @@ class Program {
             Logger.LogError("Need the name of the template to work with");
             return;
         }
-
         Cast.LaunchCast();
-
     }
 }
