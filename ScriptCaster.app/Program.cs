@@ -32,17 +32,16 @@ class Program {
 
     //TODO: get the default path from .config
     [Option("-p|--path", Description="Path of the folder containing the template")]
-    public string TemplatesFolderPath { get; } = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/Templates";
+    public string TemplatesCollectionPath { get; } = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/Templates";
 
     void OnExecute() { 
-        Console.WriteLine("Welcome into Script Caster :)");
 
         if(List) {
-            Context.Instance.ListTemplates(TemplatesFolderPath);
+            Context.Instance.ListTemplates(TemplatesCollectionPath);
             return;
         }
 
-        Context.Instance.InitContext(TemplateName, TemplatesFolderPath, Recursivity);
+        Context.Instance.InitContext(TemplateName, TemplatesCollectionPath, Recursivity);
 
         if(TemplateVariableUpdate || GlobalVariableUpdate) {
             if (TemplateVariableUpdate && (TemplateName == null || TemplateName == "")) {
