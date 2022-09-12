@@ -1,0 +1,3 @@
+/home/ashijo/Git/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/linux-x64/publish/ScriptCaster.app.pdb
+/home/ashijo/Git/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/linux-x64/publish/ScriptCaster.services.pdb
+/home/ashijo/Git/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/linux-x64/publish/ScriptCaster.app
