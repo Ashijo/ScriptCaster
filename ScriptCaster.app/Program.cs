@@ -26,7 +26,7 @@ class Program {
     [Option(Description = "Create a new empty template (work in progress)")]
     public bool Create { get; } = false;
 
-    //TODO: get the default recursivity from .config
+    //TODO: get the default recursive from .config
     [Option(Description = "The number of time parsing will be done on every text, bigger it is the more depth you can have in variables references")]
     public int Recursivity {get;} = 3;
 
@@ -44,7 +44,7 @@ class Program {
         Context.Instance.InitContext(TemplateName, TemplatesCollectionPath, Recursivity);
 
         if(TemplateVariableUpdate || GlobalVariableUpdate) {
-            if (TemplateVariableUpdate && (TemplateName == null || TemplateName == "")) {
+            if (TemplateVariableUpdate && string.IsNullOrEmpty(TemplateName)) {
                 Logger.LogError("Need the name of the template to update his variables");
                 return;
             }
@@ -54,7 +54,7 @@ class Program {
             return;
         } 
         
-        if (TemplateName == null || TemplateName == "") {
+        if (string.IsNullOrEmpty(TemplateName)) {
             Logger.LogError("Need the name of the template to work with");
             return;
         }

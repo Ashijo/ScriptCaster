@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "3rW0pu7JluddjYFqh5416jG1q944Dsdvrb6ATL8rGdS+9pCV8UXGTD3gq1SrQIQkOL0tUOh4jeoeeEaGIwcdnA==",
+  "dgSpecHash": "gH5kK+sx6hHsNUi9HMdaUqLwe8U/ceFFgfBT9qrkhUwRiC+cYs+WY/NO0CygA8Ru6l5dzpWiZlxbegDEWcRdoA==",
   "success": true,
   "projectFilePath": "/home/ashijo/Git/ScriptCaster/ScriptCaster.services/ScriptCaster.services.csproj",
   "expectedPackageFiles": [
-    "/home/ashijo/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.8/microsoft.aspnetcore.app.ref.6.0.8.nupkg.sha512"
+    "/home/ashijo/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.10/microsoft.aspnetcore.app.ref.6.0.10.nupkg.sha512"
   ],
   "logs": []
 }

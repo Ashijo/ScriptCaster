@@ -16,10 +16,10 @@ namespace ScriptCaster.app
                 ReadInput(OptionsDisplay(), VariableFile.Global);
             }
 
-            if(variableFile.HasFlag(VariableFile.Template)) {
-                Console.WriteLine("Template variables (variables of the template) :");
-                ReadInput(OptionsDisplay(), VariableFile.Template);
-            }
+            if (!variableFile.HasFlag(VariableFile.Template)) return;
+            
+            Console.WriteLine("Template variables (variables of the template) :");
+            ReadInput(OptionsDisplay(), VariableFile.Template);
 
         }
 

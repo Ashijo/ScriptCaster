@@ -65,16 +65,17 @@ namespace ScriptCaster.app
             
             TemplateVariablePath = $"{TemplatePath}/.variables.json";
 
-            LocalPath = ScriptCaster.Services.Process.GetPwd();
+            LocalPath = Directory.GetCurrentDirectory();
+
             GlobalVariablePath = $"{templatesCollectionPath}/.variables.json";
             Recursivity = recursivity;
 
             Initiated = true;
         }
 
-        public void ListTemplates(string templatesCollectionPath) {
-            var templateList = ScriptCaster.Services.Process.GetAllFilesAndFolders(templatesCollectionPath)
-            .Where(n => Directory.Exists($"{templatesCollectionPath}/{n}"));
+        public void ListTemplates(string templatesCollectionPath)
+        {
+            var templateList = Services.Process.GetDirectoriesName(templatesCollectionPath);
 
             Console.WriteLine($"I found {templateList.Count()} template{(templateList.Count() > 1 ? "s" : "")} :");
 

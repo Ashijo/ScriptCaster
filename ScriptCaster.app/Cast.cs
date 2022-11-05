@@ -12,6 +12,9 @@ namespace ScriptCaster.app
         %DATE% and co
 
     TODO: find a way to format dates
+    
+    
+    TODO: Format with pipes (eg : %Foo | Capitalize%)
 
     Nice to have :
         Logical variable : use reflexion to execute a C# function define in other variable script
@@ -54,9 +57,10 @@ namespace ScriptCaster.app
             }
 
             variables?.AddRangeOverride(templateVariables);
-
-            CreateFolders(variables);
-            var filesInTemplate = GetAllFiles();
+            var templateFolders = GetAllFolders();
+            
+            CreateFolders(variables, templateFolders);
+            var filesInTemplate = GetAllFiles(templateFolders);
 
             foreach(var tFilePath in filesInTemplate) {
 
@@ -68,6 +72,9 @@ namespace ScriptCaster.app
                     Logger.LogWarning($"{rFilePath} already exist. Ignored. Soon(~ish) force option will be add.");
                     continue;
                 }
+                
+                Logger.Log($"r file : {rFilePath}", ConsoleColor.Magenta);
+                Logger.Log($"t file : {tFilePath}", ConsoleColor.Magenta);
 
                 var fileContent = File.ReadAllText(tFilePath);
 
@@ -88,10 +95,10 @@ namespace ScriptCaster.app
 
         } 
 
-        private static void CreateFolders(Dictionary<string, string> variables) {
-            var foldersInTemplate = GetAllFolders();
+        private static void CreateFolders(Dictionary<string, string> variables, string[] templatesFolders) {
+            
 
-            foreach(var tFolder in foldersInTemplate) {
+            foreach(var tFolder in templatesFolders) {
                 var rFolder = tFolder
                     .Replace(Context.Instance.TemplatePath, Context.Instance.LocalPath)
                     .Replace("\n", "");
@@ -112,13 +119,11 @@ namespace ScriptCaster.app
 
         private static string[] GetFoldersFromParent(string directory) {
             var list = new List<string>();
-            var foldersInDir = Process.GetAllFilesAndFolders(directory);
+            var foldersInDir = Directory.GetDirectories(directory);
 
-            foreach(var folderName in foldersInDir) {
-                if(Directory.Exists($"{directory}/{folderName}")) {
-                    list.Add($"{directory}/{folderName}");
-                    list.AddRange(GetFoldersFromParent($"{directory}/{folderName}"));
-                } 
+            foreach(var folder in foldersInDir) {
+                list.Add(folder);
+                list.AddRange(GetFoldersFromParent(folder));
             }
 
             return list.ToArray();
@@ -127,23 +132,14 @@ namespace ScriptCaster.app
         //There is a way to merge GetAllFolder and GetAllFile
         //It would be a lot better optimization wize
         //But also harder to read
-        private static string[] GetAllFiles() {
-            return GetFilesFromParent(Context.Instance.TemplatePath);
-        }
-
-        private static string[] GetFilesFromParent(string directory) {
-            var list = new List<string>();
-            var filesInDir = Process.GetAllFilesAndFolders(directory);
-
-            foreach(var fileName in filesInDir) {
-                if(!Directory.Exists($"{directory}/{fileName}")) {
-                    list.Add($"{directory}/{fileName}");
-                } else {
-                    list.AddRange(GetFilesFromParent($"{directory}/{fileName}"));
-                } 
+        private static string[] GetAllFiles(string[] templateFolders)
+        {
+            var files = new List<string>();
+            foreach (var folderPath in templateFolders)
+            {
+                files.AddRange(Process.GetAllFilesWithoutConfigs(folderPath));
             }
-
-            return list.ToArray();
+            return files.ToArray();
         }
 
     }
