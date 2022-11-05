@@ -1,5 +1,6 @@
+using ScriptCaster.Services.Enums;
 
-namespace ScriptCaster.app
+namespace ScriptCaster.Services.Services
 {
 
     /*
@@ -24,10 +25,9 @@ namespace ScriptCaster.app
         }
 
         private static string[] OptionsDisplay(){
-            string[]? input = {};
-            bool first = true;
+            string[]? input = null;
             do {
-                if(!first) {
+                if(input != null) {
                     Console.WriteLine("Not a valid input, please retry :");
                 }
 
@@ -37,9 +37,9 @@ namespace ScriptCaster.app
                 Logger.Log("e|E|edit <VariableName> edit a variable", ConsoleColor.Cyan);
                 Logger.Log("ea|EA|editAll edit all variables", ConsoleColor.Cyan);
                 Logger.Log("q|Q|quit leave", ConsoleColor.Cyan);
-            
+
                 input = Console.ReadLine()?.Split(' ');
-            
+
             } while (input == null || input.Length == 0);
             
             return input;

@@ -45,10 +45,6 @@
             "McMaster.Extensions.CommandLineUtils": {
               "target": "Package",
               "version": "[4.0.1, )"
-            },
-            "Newtonsoft.Json": {
-              "target": "Package",
-              "version": "[13.0.1, )"
             }
           },
           "imports": [
@@ -65,10 +61,6 @@
             {
               "name": "Microsoft.AspNetCore.App.Ref",
               "version": "[6.0.10, 6.0.10]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[6.0.10, 6.0.10]"
             }
           ],
           "frameworkReferences": {
@@ -77,11 +69,6 @@
             }
           },
           "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.110/RuntimeIdentifierGraph.json"
-        }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
         }
       }
     },
@@ -118,6 +105,12 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.2-beta2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -140,11 +133,6 @@
             }
           },
           "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.110/RuntimeIdentifierGraph.json"
-        }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
         }
       }
     }

@@ -1,6 +1,8 @@
 ﻿
 using McMaster.Extensions.CommandLineUtils;
-using ScriptCaster.app;
+using ScriptCaster.Services;
+using ScriptCaster.Services.Enums;
+using ScriptCaster.Services.Services;
 
 
 [Command(Name = "ScriptCaster", Description = "Grab a folder, replace variables paste it wherever you are")]

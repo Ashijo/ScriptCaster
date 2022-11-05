@@ -1,4 +1,4 @@
-namespace ScriptCaster.app
+namespace ScriptCaster.Services.Enums
 {
     [Flags]
     public enum VariableFile

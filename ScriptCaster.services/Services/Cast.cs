@@ -1,8 +1,9 @@
-
+using System.Diagnostics;
 using Newtonsoft.Json;
-using ScriptCaster.Services;
+using ScriptCaster.Services.Extensions;
+using ScriptCaster.Services.Helpers;
 
-namespace ScriptCaster.app
+namespace ScriptCaster.Services.Services
 {
     /*
     Cast shall read the template, the local variable file and the global variable file
@@ -22,14 +23,14 @@ namespace ScriptCaster.app
     */
     public static class Cast
     {
-        static int depth = 0;
-
         public static void LaunchCast() {
             if (!Context.Instance.Initiated) return;
 
+            Debug.Assert(Context.Instance.GlobalVariablePath != null, "GlobalVariablePath is null in Cast.LaunchCast");
             var variables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
                 File.ReadAllText(Context.Instance.GlobalVariablePath));
 
+            Debug.Assert(Context.Instance.TemplateVariablePath != null, "TemplateVariablePath is null in Cast.LaunchCast");
             var templateVariables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
                 File.ReadAllText(Context.Instance.TemplateVariablePath));
 
@@ -47,23 +48,22 @@ namespace ScriptCaster.app
                         : fileNotExistsInGlobalMsg
                     ) : fileNotExistsInTemplateMsg;
 
-                if(variables == null && templateVariables == null) {
-                }
-
-                Logger.LogError($".variables.json does not exists {fileNotExistsIn}.");
+                Logger.LogError($".variables.json does not exists in {fileNotExistsIn}.");
                 Logger.LogWarning("You can create it running :");
                 Logger.Log($"   sc {(fileNotExistsInTemplate ? "<TemplateName>" : "")} -{(fileNotExistsInGlobal ? "g" : "")}{(fileNotExistsInTemplate ? "t" : "")}", ConsoleColor.Cyan);
+                
                 return;
             }
 
-            variables?.AddRangeOverride(templateVariables);
+            variables.AddRangeOverride(templateVariables);
             var templateFolders = GetAllFolders();
             
             CreateFolders(variables, templateFolders);
             var filesInTemplate = GetAllFiles(templateFolders);
 
             foreach(var tFilePath in filesInTemplate) {
-
+                
+                Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.LaunchCast");
                 var rFilePath = tFilePath
                     .Replace(Context.Instance.TemplatePath, Context.Instance.LocalPath)
                     .Replace("\n", "");
@@ -72,25 +72,20 @@ namespace ScriptCaster.app
                     Logger.LogWarning($"{rFilePath} already exist. Ignored. Soon(~ish) force option will be add.");
                     continue;
                 }
-                
-                Logger.Log($"r file : {rFilePath}", ConsoleColor.Magenta);
-                Logger.Log($"t file : {tFilePath}", ConsoleColor.Magenta);
 
                 var fileContent = File.ReadAllText(tFilePath);
 
                 
-                for(int i = 0; i < Context.Instance.Recursivity; i++) {
+                for(var i = 0; i < Context.Instance.Recursivity; i++) {
                     foreach(var kv in variables) {
                         rFilePath = rFilePath.Replace(kv.Key, kv.Value);
                         fileContent = fileContent.Replace(kv.Key, kv.Value);
                     }
                 }
 
-                using (var stream = File.CreateText(rFilePath)){
-                    stream.Write(fileContent);
-                    stream.Close();
-                }
-                
+                using var stream = File.CreateText(rFilePath);
+                stream.Write(fileContent);
+                stream.Close();
             }
 
         } 
@@ -99,6 +94,7 @@ namespace ScriptCaster.app
             
 
             foreach(var tFolder in templatesFolders) {
+                Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.CreateFolders");
                 var rFolder = tFolder
                     .Replace(Context.Instance.TemplatePath, Context.Instance.LocalPath)
                     .Replace("\n", "");
@@ -113,7 +109,9 @@ namespace ScriptCaster.app
             }
         }
 
-        private static string[] GetAllFolders() {
+        private static string[] GetAllFolders()
+        {
+            Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.GetAllFolders");
             return GetFoldersFromParent(Context.Instance.TemplatePath);
         }
 
@@ -130,14 +128,14 @@ namespace ScriptCaster.app
         }
 
         //There is a way to merge GetAllFolder and GetAllFile
-        //It would be a lot better optimization wize
+        //It would be a lot better optimization
         //But also harder to read
         private static string[] GetAllFiles(string[] templateFolders)
         {
             var files = new List<string>();
             foreach (var folderPath in templateFolders)
             {
-                files.AddRange(Process.GetAllFilesWithoutConfigs(folderPath));
+                files.AddRange(DirectoryHelper.GetAllFilesWithoutConfigs(folderPath));
             }
             return files.ToArray();
         }

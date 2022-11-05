@@ -1,42 +1,33 @@
+using ScriptCaster.Services.Helpers;
 
-
-namespace ScriptCaster.app
+namespace ScriptCaster.Services
 {
     
     public class Context
     {
 
         #region Singleton
-        private static Context instance = null;
+        private static Context? _instance;
 
         private Context()
         {
             Initiated = false;
         }
 
-        public static Context Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Context();
-                }
-                return instance;
-            }
-        }
+        public static Context Instance => _instance ??= new Context();
+
         #endregion
 
 
-        public string TemplateName { get; private set; }
-        public string TemplatePath { get; private set; }
-        public string TemplateVariablePath { get; private set; }
-        public string LocalPath { get; private set; }
-        public string GlobalVariablePath { get; private set; }
-        public int Recursivity {get; private set; }
+        public string? TemplateName { get; private set; }
+        public string? TemplatePath { get; private set; }
+        public string? TemplateVariablePath { get; private set; }
+        public string? LocalPath { get; private set; }
+        public string? GlobalVariablePath { get; private set; }
+        public int? Recursivity {get; private set; }
         public bool Initiated {get; private set; }
 
-        //TODO: the template path shall also be a config in ~/.config/ScriptCatser/config
+        //TODO: the template path shall also be a config in ~/.config/ScriptCaster/config
         //TODO: Recursivity shall also be a config
         public void InitContext(string? templateName, string templatesCollectionPath, int recursivity) {
             if (templateName == null) return;
@@ -75,7 +66,7 @@ namespace ScriptCaster.app
 
         public void ListTemplates(string templatesCollectionPath)
         {
-            var templateList = Services.Process.GetDirectoriesName(templatesCollectionPath);
+            var templateList = DirectoryHelper.GetDirectoriesName(templatesCollectionPath);
 
             Console.WriteLine($"I found {templateList.Count()} template{(templateList.Count() > 1 ? "s" : "")} :");
 
@@ -83,10 +74,10 @@ namespace ScriptCaster.app
                 Console.WriteLine($"   - {template}");
             }
 
-            if(templateList.Count() == 0 ){
-                Console.WriteLine("   Do not forget that only folders will be considered as template.");
-                Console.WriteLine("If you whant just a file, touch it in a folder");
-            }
+            if (templateList.Any()) return;
+            
+            Console.WriteLine("   Do not forget that only folders will be considered as template.");
+            Console.WriteLine("If you want just a file, touch it in a folder");
         }
     }
 }

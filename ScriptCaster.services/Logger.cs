@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ScriptCaster.app
+namespace ScriptCaster.Services
 {
     public static class Logger
     {

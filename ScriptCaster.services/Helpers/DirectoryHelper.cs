@@ -1,7 +1,7 @@
 
-namespace ScriptCaster.Services
+namespace ScriptCaster.Services.Helpers
 {
-    public static class Process
+    public static class DirectoryHelper
     {
         public static string[] GetDirectoriesName(string path)
         {
@@ -10,7 +10,7 @@ namespace ScriptCaster.Services
                 .ToArray();
         }
 
-        //TODO: define config filenames as variable in user .config directory
+        //TODO: define config filenames (.variable.json and .config) as variable in user .config directory
         public static string[] GetAllFilesWithoutConfigs(string path)
         {
             return Directory.GetFiles(path)

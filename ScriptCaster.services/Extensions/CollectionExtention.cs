@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ScriptCaster.app
+namespace ScriptCaster.Services.Extensions 
 {
-    public static class CollectionExtention
+    public static class CollectionExtensions
     {
         public static void AddRangeOverride<TKey, TValue>(this IDictionary<TKey, TValue> dic, IDictionary<TKey, TValue> dicToAdd)
     {
@@ -24,22 +19,22 @@ namespace ScriptCaster.app
 
     public static bool ContainsKeys<TKey, TValue>(this IDictionary<TKey, TValue> dic, IEnumerable<TKey> keys)
     {
-        bool result = false;
+        var result = false;
         keys.ForEachOrBreak((x) => { result = dic.ContainsKey(x); return result; });
         return result;
     }
 
-    public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+    private static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
     {
         foreach (var item in source)
             action(item);
     }
 
-    public static void ForEachOrBreak<T>(this IEnumerable<T> source, Func<T, bool> func)
+    private static void ForEachOrBreak<T>(this IEnumerable<T> source, Func<T, bool> func)
     {
         foreach (var item in source)
         {
-            bool result = func(item);
+            var result = func(item);
             if (result) break;
         }
     }
