@@ -1,87 +1,94 @@
-using ScriptCaster.Services.Enums;
+using System.Diagnostics;
+using System.Text.Json;
 
-namespace ScriptCaster.Services.Services
+namespace ScriptCaster.Services.Services;
+
+public class SetVariable
 {
-
-    /*
-    * Set variable class shall alow me to edit the .variables.json files
-    * Depending on the option, either editing the global variables or the variable of the template
-    */
-    public static class SetVariable
+    private Dictionary<string, string> ActualVariables { get; set; }
+    private Dictionary<string, string> VariablesBuffer { get; }
+    private string Path { get; }
+    
+    
+    public SetVariable(string? variablePath)
     {
-        public static void LaunchVariableSetting(VariableFile variableFile) {
-            Console.WriteLine("Variable setting");
-
-            if(variableFile.HasFlag(VariableFile.Global)) {
-                Console.WriteLine("Global variables (variables common to all templates) :");
-                ReadInput(OptionsDisplay(), VariableFile.Global);
-            }
-
-            if (!variableFile.HasFlag(VariableFile.Template)) return;
-            
-            Console.WriteLine("Template variables (variables of the template) :");
-            ReadInput(OptionsDisplay(), VariableFile.Template);
-
+        Debug.Assert(variablePath != null, "variablePath == null in SetVariable");
+        Path = variablePath;
+        try
+        {
+            ActualVariables = JsonSerializer.Deserialize<Dictionary<string, string>?>(
+                                  File.OpenRead(Path))
+                              ?? new Dictionary<string, string>();
+        }
+        catch (JsonException)
+        {
+            ActualVariables = new Dictionary<string, string>();
         }
 
-        private static string[] OptionsDisplay(){
-            string[]? input = null;
-            do {
-                if(input != null) {
-                    Console.WriteLine("Not a valid input, please retry :");
-                }
-
-                Logger.Log("l|L|list list all variables", ConsoleColor.Cyan);
-                Logger.Log("a|A|add add a new variable", ConsoleColor.Cyan);
-                Logger.Log("r|R|remove <VariableName> remove a variable", ConsoleColor.Cyan);
-                Logger.Log("e|E|edit <VariableName> edit a variable", ConsoleColor.Cyan);
-                Logger.Log("ea|EA|editAll edit all variables", ConsoleColor.Cyan);
-                Logger.Log("q|Q|quit leave", ConsoleColor.Cyan);
-
-                input = Console.ReadLine()?.Split(' ');
-
-            } while (input == null || input.Length == 0);
-            
-            return input;
-        } 
-
-        private static void ReadInput(string[] cmd, VariableFile target) {
-            switch (cmd[0]) {
-                case "l": 
-                case "L": 
-                case "list": 
-                    List(target);
-                break;
-                case "a":
-                case "A":
-                case "add":
-                    Add();
-                break;
-                case "r":
-                case "R":
-                case "remove":
-                    Remove();
-                break;
-                case "e":
-                case "E":
-                case "edit":
-                    Edit();
-                break;
-                case "q":
-                case "Q":
-                case "quit":
-                return;
-                default:
-                    Console.WriteLine("input not understood");
-                    return;
-            }
-        }
-
-        private static void List(VariableFile target){}
-        private static void Add() {}
-        private static void Remove() {}
-        private static void Edit() {}
-        private static void EditAll() {}
-
+        VariablesBuffer = new Dictionary<string, string>(ActualVariables);
     }
+
+    /// <summary>
+    /// Add a variable in the buffer
+    /// </summary>
+    /// <param name="name">The key of the variable</param>
+    /// <param name="value">The value of the variable</param>
+    /// <returns>true if the element is successfully added; False if the key already existed</returns>
+    public bool AddVariableToBuffer(string name, string value)
+    {
+        if (VariablesBuffer.ContainsKey(name)) return false;
+        VariablesBuffer.Add(name, value);
+        return true;
+    }
+
+    /// <summary>
+    /// Remove a variable from the buffer 
+    /// </summary>
+    /// <param name="name">The key of the variable that must be removed</param>
+    /// <returns>true if the element is successfully found and removed; otherwise, false. This method returns false if key is not found in the Buffer</returns>
+    public bool RemoveVariableToBuffer(string name)
+    {
+        return VariablesBuffer.Remove(name);
+    }
+
+    /// <summary>
+    /// Edit a variable in the buffer
+    /// </summary>
+    /// <param name="name">The key</param>
+    /// <param name="value">The value</param>
+    /// <returns>False if key doesn't exist</returns>
+    public bool EditVariableToBuffer(string name, string value)
+    {
+        if (!VariablesBuffer.ContainsKey(name)) return false;
+        
+        VariablesBuffer[name] = value;
+        
+        return true;
+    }
+
+    public Dictionary<string, string> GetBuffer()
+    {
+        return new Dictionary<string, string>(VariablesBuffer);
+    }
+
+    public Dictionary<string, string> GetActualVariables()
+    {
+        return new Dictionary<string, string>(ActualVariables);
+    }
+
+    public Dictionary<string, string> WriteBuffer()
+    {
+        var jsonBufferVariable = JsonSerializer.Serialize(VariablesBuffer);
+        File.WriteAllText(Path, jsonBufferVariable);
+        
+        ActualVariables = JsonSerializer.Deserialize<Dictionary<string, string>?>(
+                              File.OpenRead(Path)) 
+                          ?? new Dictionary<string, string>();
+        
+        return new Dictionary<string, string>(ActualVariables);
+    }
+
+
+
+
 }

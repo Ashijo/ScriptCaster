@@ -5,5 +5,6 @@
 /home/ashijo/Git/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/ScriptCaster.app.pdb
 /home/ashijo/Git/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/McMaster.Extensions.CommandLineUtils.dll
 /home/ashijo/Git/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/Newtonsoft.Json.dll
+/home/ashijo/Git/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/Spectre.Console.dll
 /home/ashijo/Git/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/ScriptCaster.services.dll
 /home/ashijo/Git/ScriptCaster/ScriptCaster.app/bin/Debug/net6.0/publish/ScriptCaster.services.pdb

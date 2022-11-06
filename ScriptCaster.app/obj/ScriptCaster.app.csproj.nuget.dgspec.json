@@ -45,6 +45,10 @@
             "McMaster.Extensions.CommandLineUtils": {
               "target": "Package",
               "version": "[4.0.1, )"
+            },
+            "Spectre.Console": {
+              "target": "Package",
+              "version": "[0.45.1-preview.0.33, )"
             }
           },
           "imports": [

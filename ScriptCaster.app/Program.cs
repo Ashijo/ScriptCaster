@@ -1,5 +1,6 @@
 ﻿
 using McMaster.Extensions.CommandLineUtils;
+using ScriptCaster.App.CmdController;
 using ScriptCaster.Services;
 using ScriptCaster.Services.Enums;
 using ScriptCaster.Services.Services;
@@ -46,8 +47,6 @@ class Program {
             return;
         }
         
-        Logger.Log($"Create : {Create}", ConsoleColor.Magenta);
-
         Context.Instance.InitContext(TemplateName, TemplatesCollectionPath, Recursivity, Force, Create);
         
         if (Create)
@@ -59,7 +58,7 @@ class Program {
 
             TemplateVariableUpdate = string.IsNullOrEmpty(answer) || answer is "Y" or "YES";
 
-            return;
+            if (!TemplateVariableUpdate) return;
         }
 
         if(TemplateVariableUpdate || GlobalVariableUpdate) {
@@ -69,7 +68,7 @@ class Program {
             }
             var variableFile = GlobalVariableUpdate ? VariableFile.Global : 0;
             variableFile |= TemplateVariableUpdate ? VariableFile.Template : 0;
-            SetVariable.LaunchVariableSetting(variableFile);
+            SetVariableCmdController.LaunchVariableSetting(variableFile);
             return;
         } 
         
