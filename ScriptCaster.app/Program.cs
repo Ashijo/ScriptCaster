@@ -16,10 +16,10 @@ class Program {
     [Argument(0, Name = "TemplateName", Description = "The name of the template we have to work with")]
     private string? TemplateName { get; } = null;
 
-    [Option("-t|--template", Description = "Update the variables files of the template (work in progress)")]
+    [Option("-t|--template", Description = "Update the variables files of the template")]
     private bool TemplateVariableUpdate { get; set; } = false;
 
-    [Option("-g|--global", Description = "Update the global variables files (work in progress)")]
+    [Option("-g|--global", Description = "Update the global variables files")]
     private bool GlobalVariableUpdate { get; } = false;
     
     [Option("-f|--force", Description = "Force the replacement of already existing files with new ones (I hope you know what you are doing)")]
@@ -29,7 +29,7 @@ class Program {
     private bool List { get; } = false;
 
     //IDEA: Create template from other template ?    
-    [Option(Description = "Create a new empty template (work in progress)")]
+    [Option(Description = "Create a new empty template")]
     private bool Create { get; } = false;
 
     //TODO: get the default recursive from .config
@@ -66,8 +66,7 @@ class Program {
                 Logger.LogError("Need the name of the template to update his variables");
                 return;
             }
-            var variableFile = GlobalVariableUpdate ? VariableFile.Global : 0;
-            variableFile |= TemplateVariableUpdate ? VariableFile.Template : 0;
+            var variableFile = TemplateVariableUpdate ? VariableFile.Template : VariableFile.Global;
             SetVariableCmdController.LaunchVariableSetting(variableFile);
             return;
         } 
