@@ -5,7 +5,7 @@ using ScriptCaster.Services.Enums;
 using ScriptCaster.Services.Services;
 
 
-[Command(Name = "ScriptCaster", Description = "Grab a folder, replace variables paste it wherever you are")]
+[Command(Name = "ScriptCaster", Description = "Grab a folder, replace variables and paste it wherever you are")]
 [HelpOption("-?|-h|--help")]
 class Program {
 
@@ -13,37 +13,54 @@ class Program {
 
 
     [Argument(0, Name = "TemplateName", Description = "The name of the template we have to work with")]
-    private string? TemplateName { get; }
+    private string? TemplateName { get; } = null;
 
     [Option("-t|--template", Description = "Update the variables files of the template (work in progress)")]
-    public bool TemplateVariableUpdate { get; } = false;
+    private bool TemplateVariableUpdate { get; set; } = false;
 
     [Option("-g|--global", Description = "Update the global variables files (work in progress)")]
-    public bool GlobalVariableUpdate { get; } = false;
+    private bool GlobalVariableUpdate { get; } = false;
+    
+    [Option("-f|--force", Description = "Force the replacement of already existing files with new ones (I hope you know what you are doing)")]
+    private bool Force { get; } = false;
 
     [Option(Description = "List of all templates")]
-    public bool List { get; } = false;
+    private bool List { get; } = false;
 
     //IDEA: Create template from other template ?    
     [Option(Description = "Create a new empty template (work in progress)")]
-    public bool Create { get; } = false;
+    private bool Create { get; } = false;
 
     //TODO: get the default recursive from .config
     [Option(Description = "The number of time parsing will be done on every text, bigger it is the more depth you can have in variables references")]
-    public int Recursivity {get;} = 3;
+    private int Recursivity {get;} = 3;
 
     //TODO: get the default path from .config
     [Option("-p|--path", Description="Path of the folder containing the template")]
-    public string TemplatesCollectionPath { get; } = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/Templates";
+    private string TemplatesCollectionPath { get; } = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/Templates";
 
     void OnExecute() { 
 
         if(List) {
-            Context.Instance.ListTemplates(TemplatesCollectionPath);
+            Context.ListTemplates(TemplatesCollectionPath);
             return;
         }
+        
+        Logger.Log($"Create : {Create}", ConsoleColor.Magenta);
 
-        Context.Instance.InitContext(TemplateName, TemplatesCollectionPath, Recursivity);
+        Context.Instance.InitContext(TemplateName, TemplatesCollectionPath, Recursivity, Force, Create);
+        
+        if (Create)
+        {
+            ScriptCaster.Services.Services.Create.CreateNewTemplate();
+            Logger.LogSuccess($"New template \"{Context.Instance.TemplateName}\" created");
+            Logger.Log("Do you want to add variables to your template ? y/n (default=y)");
+            var answer = Console.ReadLine()?.Trim().ToUpper();
+
+            TemplateVariableUpdate = string.IsNullOrEmpty(answer) || answer is "Y" or "YES";
+
+            return;
+        }
 
         if(TemplateVariableUpdate || GlobalVariableUpdate) {
             if (TemplateVariableUpdate && string.IsNullOrEmpty(TemplateName)) {
@@ -60,6 +77,9 @@ class Program {
             Logger.LogError("Need the name of the template to work with");
             return;
         }
+
+      
+
         Cast.LaunchCast();
     }
 }

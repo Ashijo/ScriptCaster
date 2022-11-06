@@ -7,20 +7,24 @@ namespace ScriptCaster.Services.Services
 {
     /*
     Cast shall read the template, the local variable file and the global variable file
-    variable files are json dictionarie <string,string>, every occurence of the key shall be replace by the value
-    TODO: default key to add:
+    variable files are json dictionary <string,string>, every occurence of the key shall be replace by the value
+    TODO: Split on '%'
+    
+    TODO: Separator defined in global config
+    
+    TODO: default keys to add:
         %NEWGUID%
-        %DATE% and co
-
-    TODO: find a way to format dates
+        %DATE%
     
+    TODO: Format with pipes (eg : %FOO | Capitalize%)
     
-    TODO: Format with pipes (eg : %Foo | Capitalize%)
-
-    Nice to have :
+    Nice to have (maybe?) :
         Logical variable : use reflexion to execute a C# function define in other variable script
         Bash variable : set variable as the result of a bash command
+        Dynamic values : Change variable files from dictionary <string,string> to dictionary <string, string | dictionary>
+            Could be reference by %FOO.BOO% or %FOO%.%BOO%
     */
+    
     public static class Cast
     {
         public static void LaunchCast() {
@@ -34,94 +38,87 @@ namespace ScriptCaster.Services.Services
             var templateVariables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
                 File.ReadAllText(Context.Instance.TemplateVariablePath));
 
-            //TODO Refactoring: Move this validation somewhere else 
-            if(variables == null || templateVariables == null) {
-                var fileNotExistsInGlobal = variables == null;
-                var fileNotExistsInTemplate = templateVariables == null;
-
-                var fileNotExistsInGlobalMsg = $"global folder ({Context.Instance.GlobalVariablePath}) ";
-                var fileNotExistsInTemplateMsg = $"template folder ({Context.Instance.TemplateVariablePath}) ";
-
-                var fileNotExistsIn = fileNotExistsInGlobal ? 
-                    ( fileNotExistsInTemplate ? 
-                        $"{fileNotExistsInGlobalMsg} and {fileNotExistsInTemplateMsg}" 
-                        : fileNotExistsInGlobalMsg
-                    ) : fileNotExistsInTemplateMsg;
-
-                Logger.LogError($".variables.json does not exists in {fileNotExistsIn}.");
-                Logger.LogWarning("You can create it running :");
-                Logger.Log($"   sc {(fileNotExistsInTemplate ? "<TemplateName>" : "")} -{(fileNotExistsInGlobal ? "g" : "")}{(fileNotExistsInTemplate ? "t" : "")}", ConsoleColor.Cyan);
-                
-                return;
-            }
-
-            variables.AddRangeOverride(templateVariables);
+            if(!ValidateVariables(variables, templateVariables)) return;
+            
+            Debug.Assert(variables != null && templateVariables != null, "ValidateVariables() failed");
+            variables.AddRangeOverride(templateVariables); // Global variables can be override by local variables
+            
             var templateFolders = GetAllFolders();
+            var filesInTemplate = GetAllFiles(templateFolders);
             
             CreateFolders(variables, templateFolders);
-            var filesInTemplate = GetAllFiles(templateFolders);
+            CreateFiles(variables, filesInTemplate);
+        } 
 
-            foreach(var tFilePath in filesInTemplate) {
-                
-                Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.LaunchCast");
-                var rFilePath = tFilePath
+        private static void CreateFolders(Dictionary<string, string> variables, string[] templatesFolders) {
+            foreach(var templateFolder in templatesFolders) {
+                Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.CreateFolders");
+                var resultFolder = templateFolder
                     .Replace(Context.Instance.TemplatePath, Context.Instance.LocalPath)
                     .Replace("\n", "");
 
-                if(File.Exists(rFilePath)) {
-                    Logger.LogWarning($"{rFilePath} already exist. Ignored. Soon(~ish) force option will be add.");
-                    continue;
+                for(var i = 0; i < Context.Instance.Recursivity; i++)
+                {
+                    resultFolder = variables.Aggregate(resultFolder, 
+                        (current, kv) => current.Replace(kv.Key, kv.Value));
                 }
+
+                Directory.CreateDirectory(resultFolder);
+            }
+        }
+
+        private static void CreateFiles(Dictionary<string,string>? variables, string[] filesInTemplate)
+        {
+            foreach(var tFilePath in filesInTemplate) {
+                
+                Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.LaunchCast");
+                var resultFilePath = tFilePath
+                    .Replace(Context.Instance.TemplatePath, Context.Instance.LocalPath)
+                    .Replace("\n", "");
+
+                var resultFileExist = File.Exists(resultFilePath); 
+                
+                if(resultFileExist && !Context.Instance.Forced) {
+                    if (!Context.Instance.Forced)
+                    {
+                        Logger.LogWarning($"{resultFilePath} already exist. Ignored. You can force replace with -f or --force.");
+                        continue;
+                    }
+                }
+                
+                if(resultFileExist) Directory.Delete(resultFilePath);
 
                 var fileContent = File.ReadAllText(tFilePath);
 
                 
-                for(var i = 0; i < Context.Instance.Recursivity; i++) {
+                for(var i = 0; i < Context.Instance.Recursivity; i++)
+                {
+                    Debug.Assert(variables != null, "variables is null");
                     foreach(var kv in variables) {
-                        rFilePath = rFilePath.Replace(kv.Key, kv.Value);
+                        resultFilePath = resultFilePath.Replace(kv.Key, kv.Value);
                         fileContent = fileContent.Replace(kv.Key, kv.Value);
                     }
                 }
 
-                using var stream = File.CreateText(rFilePath);
+                using var stream = File.CreateText(resultFilePath);
                 stream.Write(fileContent);
                 stream.Close();
-            }
-
-        } 
-
-        private static void CreateFolders(Dictionary<string, string> variables, string[] templatesFolders) {
-            
-
-            foreach(var tFolder in templatesFolders) {
-                Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.CreateFolders");
-                var rFolder = tFolder
-                    .Replace(Context.Instance.TemplatePath, Context.Instance.LocalPath)
-                    .Replace("\n", "");
-
-                for(int i = 0; i < Context.Instance.Recursivity; i++) {
-                    foreach(var kv in variables) {
-                        rFolder = rFolder.Replace(kv.Key, kv.Value);
-                    }
-                }
-
-                Directory.CreateDirectory(rFolder);
             }
         }
 
         private static string[] GetAllFolders()
         {
             Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.GetAllFolders");
-            return GetFoldersFromParent(Context.Instance.TemplatePath);
+            return GetTemplateFoldersFromParent(Context.Instance.TemplatePath);
         }
 
-        private static string[] GetFoldersFromParent(string directory) {
+        private static string[] GetTemplateFoldersFromParent(string directory) {
             var list = new List<string>();
             var foldersInDir = Directory.GetDirectories(directory);
 
             foreach(var folder in foldersInDir) {
                 list.Add(folder);
-                list.AddRange(GetFoldersFromParent(folder));
+                list.AddRange(GetTemplateFoldersFromParent(folder));
             }
 
             return list.ToArray();
@@ -139,6 +136,34 @@ namespace ScriptCaster.Services.Services
             }
             return files.ToArray();
         }
+
+        #region Validations
+
+        private static bool ValidateVariables( Dictionary<string,string>? variables,  Dictionary<string,string>? templateVariables)
+        {
+            if (variables != null && templateVariables != null) return true;
+            
+            var fileNotExistsInGlobal = variables == null;
+            var fileNotExistsInTemplate = templateVariables == null;
+
+            var fileNotExistsInGlobalMsg = $"global folder ({Context.Instance.GlobalVariablePath}) ";
+            var fileNotExistsInTemplateMsg = $"template folder ({Context.Instance.TemplateVariablePath}) ";
+
+            var fileNotExistsIn = fileNotExistsInGlobal ? 
+                ( fileNotExistsInTemplate ? 
+                    $"{fileNotExistsInGlobalMsg} and {fileNotExistsInTemplateMsg}" 
+                    : fileNotExistsInGlobalMsg
+                ) : fileNotExistsInTemplateMsg;
+
+            Logger.LogError($".variables.json does not exists in {fileNotExistsIn}.");
+            Logger.LogWarning("You can create it running :");
+            Logger.Log($"   sc {(fileNotExistsInTemplate ? "<TemplateName>" : "")} -{(fileNotExistsInGlobal ? "g" : "")}{(fileNotExistsInTemplate ? "t" : "")}", ConsoleColor.Cyan);
+                
+            return false;
+        }
+
+        #endregion
+       
 
     }
 }
