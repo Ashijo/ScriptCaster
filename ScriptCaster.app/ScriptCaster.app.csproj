@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.1" />
-      <PackageReference Include="Spectre.Console" Version="0.45.1-preview.0.33" />
+        <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.1"/>
+        <PackageReference Include="Spectre.Console" Version="0.45.1-preview.0.33"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ScriptCaster.services\ScriptCaster.services.csproj" />
+        <ProjectReference Include="..\ScriptCaster.services\ScriptCaster.services.csproj"/>
     </ItemGroup>
 
 </Project>

@@ -5,11 +5,6 @@ namespace ScriptCaster.Services.Services;
 
 public class SetVariable
 {
-    private Dictionary<string, string> ActualVariables { get; set; }
-    private Dictionary<string, string> VariablesBuffer { get; }
-    private string Path { get; }
-    
-    
     public SetVariable(string? variablePath)
     {
         Debug.Assert(variablePath != null, "variablePath == null in SetVariable");
@@ -28,8 +23,12 @@ public class SetVariable
         VariablesBuffer = new Dictionary<string, string>(ActualVariables);
     }
 
+    private Dictionary<string, string> ActualVariables { get; set; }
+    private Dictionary<string, string> VariablesBuffer { get; }
+    private string Path { get; }
+
     /// <summary>
-    /// Add a variable in the buffer
+    ///     Add a variable in the buffer
     /// </summary>
     /// <param name="name">The key of the variable</param>
     /// <param name="value">The value of the variable</param>
@@ -42,17 +41,20 @@ public class SetVariable
     }
 
     /// <summary>
-    /// Remove a variable from the buffer 
+    ///     Remove a variable from the buffer
     /// </summary>
     /// <param name="name">The key of the variable that must be removed</param>
-    /// <returns>true if the element is successfully found and removed; otherwise, false. This method returns false if key is not found in the Buffer</returns>
+    /// <returns>
+    ///     true if the element is successfully found and removed; otherwise, false. This method returns false if key is
+    ///     not found in the Buffer
+    /// </returns>
     public bool RemoveVariableToBuffer(string name)
     {
         return VariablesBuffer.Remove(name);
     }
 
     /// <summary>
-    /// Edit a variable in the buffer
+    ///     Edit a variable in the buffer
     /// </summary>
     /// <param name="name">The key</param>
     /// <param name="value">The value</param>
@@ -60,9 +62,9 @@ public class SetVariable
     public bool EditVariableToBuffer(string name, string value)
     {
         if (!VariablesBuffer.ContainsKey(name)) return false;
-        
+
         VariablesBuffer[name] = value;
-        
+
         return true;
     }
 
@@ -80,15 +82,11 @@ public class SetVariable
     {
         var jsonBufferVariable = JsonSerializer.Serialize(VariablesBuffer);
         File.WriteAllText(Path, jsonBufferVariable);
-        
+
         ActualVariables = JsonSerializer.Deserialize<Dictionary<string, string>?>(
-                              File.OpenRead(Path)) 
+                              File.OpenRead(Path))
                           ?? new Dictionary<string, string>();
-        
+
         return new Dictionary<string, string>(ActualVariables);
     }
-
-
-
-
 }

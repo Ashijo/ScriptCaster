@@ -1,15 +1,20 @@
-namespace ScriptCaster.Services.Extensions 
+namespace ScriptCaster.Services.Extensions;
+
+public static class CollectionExtensions
 {
-    public static class CollectionExtensions
-    {
-        public static void AddRangeOverride<TKey, TValue>(this IDictionary<TKey, TValue> dic, IDictionary<TKey, TValue> dicToAdd)
+    public static void AddRangeOverride<TKey, TValue>(this IDictionary<TKey, TValue> dic,
+        IDictionary<TKey, TValue> dicToAdd)
     {
         dicToAdd.ForEach(x => dic[x.Key] = x.Value);
     }
 
-    public static void AddRangeNewOnly<TKey, TValue>(this IDictionary<TKey, TValue> dic, IDictionary<TKey, TValue> dicToAdd)
+    public static void AddRangeNewOnly<TKey, TValue>(this IDictionary<TKey, TValue> dic,
+        IDictionary<TKey, TValue> dicToAdd)
     {
-        dicToAdd.ForEach(x => { if (!dic.ContainsKey(x.Key)) dic.Add(x.Key, x.Value); });
+        dicToAdd.ForEach(x =>
+        {
+            if (!dic.ContainsKey(x.Key)) dic.Add(x.Key, x.Value);
+        });
     }
 
     public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dic, IDictionary<TKey, TValue> dicToAdd)
@@ -20,7 +25,11 @@ namespace ScriptCaster.Services.Extensions
     public static bool ContainsKeys<TKey, TValue>(this IDictionary<TKey, TValue> dic, IEnumerable<TKey> keys)
     {
         var result = false;
-        keys.ForEachOrBreak((x) => { result = dic.ContainsKey(x); return result; });
+        keys.ForEachOrBreak(x =>
+        {
+            result = dic.ContainsKey(x);
+            return result;
+        });
         return result;
     }
 
@@ -37,7 +46,5 @@ namespace ScriptCaster.Services.Extensions
             var result = func(item);
             if (result) break;
         }
-    }
-  
     }
 }

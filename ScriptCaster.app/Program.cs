@@ -1,28 +1,25 @@
-﻿
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using ScriptCaster.App.CmdController;
 using ScriptCaster.Services;
 using ScriptCaster.Services.Enums;
 using ScriptCaster.Services.Services;
 
-
 [Command(Name = "ScriptCaster", Description = "Grab a folder, replace variables and paste it wherever you are")]
 [HelpOption("-?|-h|--help")]
-class Program {
-
-    static void Main(string[] args) => CommandLineApplication.Execute<Program>(args);
-
-
+internal class Program
+{
     [Argument(0, Name = "TemplateName", Description = "The name of the template we have to work with")]
     private string? TemplateName { get; } = null;
 
     [Option("-t|--template", Description = "Update the variables files of the template")]
-    private bool TemplateVariableUpdate { get; set; } = false;
+    private bool TemplateVariableUpdate { get; set; }
 
     [Option("-g|--global", Description = "Update the global variables files")]
     private bool GlobalVariableUpdate { get; } = false;
-    
-    [Option("-f|--force", Description = "Force the replacement of already existing files with new ones (I hope you know what you are doing)")]
+
+    [Option("-f|--force",
+        Description =
+            "Force the replacement of already existing files with new ones (I hope you know what you are doing)")]
     private bool Force { get; } = false;
 
     [Option(Description = "List of all templates")]
@@ -33,22 +30,30 @@ class Program {
     private bool Create { get; } = false;
 
     //TODO: get the default recursive from .config
-    [Option(Description = "The number of time parsing will be done on every text, bigger it is the more depth you can have in variables references")]
-    private int Recursivity {get;} = 3;
+    [Option(Description =
+        "The number of time parsing will be done on every text, bigger it is the more depth you can have in variables references")]
+    private int Recursivity { get; } = 3;
 
     //TODO: get the default path from .config
-    [Option("-p|--path", Description="Path of the folder containing the template")]
-    private string TemplatesCollectionPath { get; } = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/Templates";
+    [Option("-p|--path", Description = "Path of the folder containing the template")]
+    private string TemplatesCollectionPath { get; } =
+        $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/Templates";
 
-    void OnExecute() { 
+    private static void Main(string[] args)
+    {
+        CommandLineApplication.Execute<Program>(args);
+    }
 
-        if(List) {
+    private void OnExecute()
+    {
+        if (List)
+        {
             Context.ListTemplates(TemplatesCollectionPath);
             return;
         }
-        
+
         Context.Instance.InitContext(TemplateName, TemplatesCollectionPath, Recursivity, Force, Create);
-        
+
         if (Create)
         {
             ScriptCaster.Services.Services.Create.CreateNewTemplate();
@@ -61,22 +66,25 @@ class Program {
             if (!TemplateVariableUpdate) return;
         }
 
-        if(TemplateVariableUpdate || GlobalVariableUpdate) {
-            if (TemplateVariableUpdate && string.IsNullOrEmpty(TemplateName)) {
+        if (TemplateVariableUpdate || GlobalVariableUpdate)
+        {
+            if (TemplateVariableUpdate && string.IsNullOrEmpty(TemplateName))
+            {
                 Logger.LogError("Need the name of the template to update his variables");
                 return;
             }
+
             var variableFile = TemplateVariableUpdate ? VariableFile.Template : VariableFile.Global;
             SetVariableCmdController.LaunchVariableSetting(variableFile);
             return;
-        } 
-        
-        if (string.IsNullOrEmpty(TemplateName)) {
+        }
+
+        if (string.IsNullOrEmpty(TemplateName))
+        {
             Logger.LogError("Need the name of the template to work with");
             return;
         }
 
-      
 
         Cast.LaunchCast();
     }
