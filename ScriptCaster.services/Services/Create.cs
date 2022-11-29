@@ -5,21 +5,21 @@ public static class Create
 {
     public static void CreateNewTemplate()
     {
-        if (Context.Instance.TemplatePath == null)
+        if (Context.TemplatePath == null)
         {
-            Logger.LogError("New template path no found");
+            Logger.LogError("New template path not found");
             return;
         }
 
-        var directoryInfo = new DirectoryInfo(Context.Instance.TemplatePath);
+        var directoryInfo = new DirectoryInfo(Context.TemplatePath);
         directoryInfo.Create();
 
-        if (Context.Instance.TemplateVariablePath == null)
+        if (Context.TemplateVariablePath == null)
         {
             directoryInfo.Delete();
             return;
         }
 
-        File.Create(Context.Instance.TemplateVariablePath);
+        File.Create(Context.TemplateVariablePath);
     }
 }

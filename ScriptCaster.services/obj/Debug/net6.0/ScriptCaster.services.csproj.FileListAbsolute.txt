@@ -21,4 +21,4 @@
 /home/ashijo/Git/ScriptCaster/ScriptCaster.services/obj/Debug/net6.0/ScriptCaster.services.dll
 /home/ashijo/Git/ScriptCaster/ScriptCaster.services/obj/Debug/net6.0/ScriptCaster.services.pdb
 /home/ashijo/Git/ScriptCaster/ScriptCaster.services/obj/Debug/net6.0/ref/ScriptCaster.services.dll
-/home/ashijo/Git/ScriptCaster/ScriptCaster.services/bin/Debug/net6.0/ref/ScriptCaster.services.dll
+/home/ashijo/Git/ScriptCaster/ScriptCaster.services/obj/Debug/net6.0/refint/ScriptCaster.services.dll

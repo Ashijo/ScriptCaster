@@ -28,15 +28,15 @@ public static class Cast
 {
     public static void LaunchCast()
     {
-        if (!Context.Instance.Initiated) return;
+        if (!Context.Initiated) return;
 
-        Debug.Assert(Context.Instance.GlobalVariablePath != null, "GlobalVariablePath is null in Cast.LaunchCast");
+        Debug.Assert(Context.GlobalVariablePath != null, "GlobalVariablePath is null in Cast.LaunchCast");
         var variables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
-            File.ReadAllText(Context.Instance.GlobalVariablePath));
+            File.ReadAllText(Context.GlobalVariablePath));
 
-        Debug.Assert(Context.Instance.TemplateVariablePath != null, "TemplateVariablePath is null in Cast.LaunchCast");
+        Debug.Assert(Context.TemplateVariablePath != null, "TemplateVariablePath is null in Cast.LaunchCast");
         var templateVariables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
-            File.ReadAllText(Context.Instance.TemplateVariablePath));
+            File.ReadAllText(Context.TemplateVariablePath));
 
         if (!ValidateVariables(variables, templateVariables)) return;
 
@@ -54,12 +54,12 @@ public static class Cast
     {
         foreach (var templateFolder in templatesFolders)
         {
-            Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.CreateFolders");
+            Debug.Assert(Context.TemplatePath != null, "TemplatePath is null in Cast.CreateFolders");
             var resultFolder = templateFolder
-                .Replace(Context.Instance.TemplatePath, Context.Instance.LocalPath)
+                .Replace(Context.TemplatePath, Context.LocalPath)
                 .Replace("\n", "");
 
-            for (var i = 0; i < Context.Instance.Recursivity; i++)
+            for (var i = 0; i < Context.Recursivity; i++)
                 resultFolder = variables.Aggregate(resultFolder,
                     (current, kv) => current.Replace(kv.Key, kv.Value));
 
@@ -71,15 +71,15 @@ public static class Cast
     {
         foreach (var tFilePath in filesInTemplate)
         {
-            Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.LaunchCast");
+            Debug.Assert(Context.TemplatePath != null, "TemplatePath is null in Cast.LaunchCast");
             var resultFilePath = tFilePath
-                .Replace(Context.Instance.TemplatePath, Context.Instance.LocalPath)
+                .Replace(Context.TemplatePath, Context.LocalPath)
                 .Replace("\n", "");
 
             var resultFileExist = File.Exists(resultFilePath);
 
-            if (resultFileExist && !Context.Instance.Forced)
-                if (!Context.Instance.Forced)
+            if (resultFileExist && !Context.Forced)
+                if (!Context.Forced)
                 {
                     Logger.LogWarning(
                         $"{resultFilePath} already exist. Ignored. You can force replace with -f or --force.");
@@ -91,7 +91,7 @@ public static class Cast
             var fileContent = File.ReadAllText(tFilePath);
 
 
-            for (var i = 0; i < Context.Instance.Recursivity; i++)
+            for (var i = 0; i < Context.Recursivity; i++)
             {
                 Debug.Assert(variables != null, "variables is null");
                 foreach (var kv in variables)
@@ -109,8 +109,8 @@ public static class Cast
 
     private static string[] GetAllFolders()
     {
-        Debug.Assert(Context.Instance.TemplatePath != null, "TemplatePath is null in Cast.GetAllFolders");
-        return GetTemplateFoldersFromParent(Context.Instance.TemplatePath);
+        Debug.Assert(Context.TemplatePath != null, "TemplatePath is null in Cast.GetAllFolders");
+        return GetTemplateFoldersFromParent(Context.TemplatePath);
     }
 
     private static string[] GetTemplateFoldersFromParent(string directory)
@@ -128,7 +128,7 @@ public static class Cast
     }
 
     //There is a way to merge GetAllFolder and GetAllFile
-    //It would be a lot better optimization
+    //It would be a better optimization
     //But also harder to read
     private static string[] GetAllFiles(string[] templateFolders)
     {
@@ -148,8 +148,8 @@ public static class Cast
         var fileNotExistsInGlobal = variables == null;
         var fileNotExistsInTemplate = templateVariables == null;
 
-        var fileNotExistsInGlobalMsg = $"global folder ({Context.Instance.GlobalVariablePath}) ";
-        var fileNotExistsInTemplateMsg = $"template folder ({Context.Instance.TemplateVariablePath}) ";
+        var fileNotExistsInGlobalMsg = $"global folder ({Context.GlobalVariablePath}) ";
+        var fileNotExistsInTemplateMsg = $"template folder ({Context.TemplateVariablePath}) ";
 
         var fileNotExistsIn = fileNotExistsInGlobal
             ? fileNotExistsInTemplate

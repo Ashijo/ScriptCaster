@@ -15,8 +15,8 @@ public static class SetVariableCmdController
 
     private static readonly Dictionary<VariableFile, SetVariable> SetVariableServices = new()
     {
-        { VariableFile.Global, new SetVariable(Context.Instance.GlobalVariablePath) },
-        { VariableFile.Template, new SetVariable(Context.Instance.TemplateVariablePath) }
+        { VariableFile.Global, new SetVariable(Context.GlobalVariablePath) },
+        { VariableFile.Template, new SetVariable(Context.TemplateVariablePath) }
     };
 
     private static string CurrentTargetStr =>

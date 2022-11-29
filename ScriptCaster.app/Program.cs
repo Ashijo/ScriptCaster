@@ -46,18 +46,18 @@ internal class Program
 
     private void OnExecute()
     {
+        Context.InitContext(TemplateName, TemplatesCollectionPath, Recursivity, Force, Create);
+        
         if (List)
         {
-            Context.ListTemplates(TemplatesCollectionPath);
+            Context.ListTemplates();
             return;
         }
-
-        Context.Instance.InitContext(TemplateName, TemplatesCollectionPath, Recursivity, Force, Create);
 
         if (Create)
         {
             ScriptCaster.Services.Services.Create.CreateNewTemplate();
-            Logger.LogSuccess($"New template \"{Context.Instance.TemplateName}\" created");
+            Logger.LogSuccess($"New template \"{Context.TemplateName}\" created");
             Logger.Log("Do you want to add variables to your template ? y/n (default=y)");
             var answer = Console.ReadLine()?.Trim().ToUpper();
 
@@ -81,7 +81,7 @@ internal class Program
 
         if (string.IsNullOrEmpty(TemplateName))
         {
-            Logger.LogError("Need the name of the template to work with");
+            MenuCmdController.StartMenu();
             return;
         }
 

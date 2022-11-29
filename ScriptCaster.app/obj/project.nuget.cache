@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "QWRAL8xIiPbIZjRwOotXhX7XMW3F7KEf3ECyiRZ1+o1c2yq3WTdbQ/bHNMBRd1v8oImh2yTVoCS/WwR7lxYXdQ==",
+  "dgSpecHash": "fM1NwDqhxSYE0dLTz6apOgqOeftTrzsj6khOmVJlBD3el7SYZ/zBe52zs0xxsGp5hq678kK+ncDRWVPu2B3kjw==",
   "success": true,
   "projectFilePath": "/home/ashijo/Git/ScriptCaster/ScriptCaster.app/ScriptCaster.app.csproj",
   "expectedPackageFiles": [
@@ -9,7 +9,7 @@
     "/home/ashijo/.nuget/packages/spectre.console/0.45.1-preview.0.33/spectre.console.0.45.1-preview.0.33.nupkg.sha512",
     "/home/ashijo/.nuget/packages/system.componentmodel.annotations/5.0.0/system.componentmodel.annotations.5.0.0.nupkg.sha512",
     "/home/ashijo/.nuget/packages/system.memory/4.5.5/system.memory.4.5.5.nupkg.sha512",
-    "/home/ashijo/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.10/microsoft.aspnetcore.app.ref.6.0.10.nupkg.sha512"
+    "/home/ashijo/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.0/microsoft.aspnetcore.app.ref.7.0.0.nupkg.sha512"
   ],
   "logs": []
 }
