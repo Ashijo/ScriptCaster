@@ -1,3 +1,0 @@
-/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.services/bin/Debug/net6.0/publish/ScriptCaster.services.dll
-/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.services/bin/Debug/net6.0/publish/ScriptCaster.services.deps.json
-/home/ashijo/Git/ScriptCaster/ScriptCaster/ScriptCaster.services/bin/Debug/net6.0/publish/ScriptCaster.services.pdb
