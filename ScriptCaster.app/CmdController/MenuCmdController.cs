@@ -22,7 +22,5 @@ public static class MenuCmdController
 
         var parsedCommand = command.Remove(0, 6).Split(' ');
         AnsiConsole.WriteLine(parsedCommand[0]);
-
-        
     }
 }
