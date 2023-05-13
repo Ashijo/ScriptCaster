@@ -22,4 +22,11 @@ public static class Create
 
         File.Create(Context.TemplateVariablePath);
     }
+
+    public static void CreateTemplateFolder()
+    {
+        if (Context.TemplatesCollectionPath == null)
+            return;
+        var directoryInfo = new DirectoryInfo(Context.TemplatesCollectionPath);
+    }
 }

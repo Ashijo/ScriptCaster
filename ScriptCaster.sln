@@ -4,6 +4,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptCaster.app", "ScriptC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptCaster.services", "ScriptCaster.services\ScriptCaster.services.csproj", "{E10D8E4B-5045-4027-8C88-5E2D15BF7F18}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{0DE77440-061E-45C4-A980-D9D9CEF09753}"
+	ProjectSection(SolutionItems) = preProject
+		ScriptCaster.sln = ScriptCaster.sln
+		global.json = global.json
+		README.md = README.md
+		LICENSE = LICENSE
+		.gitignore = .gitignore
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
