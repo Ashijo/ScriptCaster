@@ -29,7 +29,7 @@ Nice to have (maybe?) :
 
 public static class Cast
 {
-	public static RLaunchCastCallback LaunchCast()
+	public static RLaunchCastCallback LaunchCast(bool force = false)
 	{
 		if (!Context.Initiated)
 		{
@@ -57,7 +57,7 @@ public static class Cast
 		var filesInTemplate = GetAllFiles(templateFolders);
 
 		CreateFolders(variables, templateFolders);
-		CreateFiles(variables, filesInTemplate);
+		CreateFiles(variables, filesInTemplate, force);
 
 		return new RLaunchCastCallback(true, true, validationCallback);
 	}
@@ -81,7 +81,8 @@ public static class Cast
 		}
 	}
 
-	private static void CreateFiles(Dictionary<string, string>? variables, string[] filesInTemplate)
+	private static void CreateFiles(Dictionary<string, string>? variables, string[] filesInTemplate,
+		bool forced = false)
 	{
 		foreach (var tFilePath in filesInTemplate)
 		{
@@ -92,9 +93,9 @@ public static class Cast
 
 			var resultFileExist = File.Exists(resultFilePath);
 
-			if (resultFileExist && !Context.Forced)
+			if (resultFileExist && !forced)
 			{
-				if (!Context.Forced)
+				if (!forced)
 				{
 					Logger.LogWarning(
 						$"{resultFilePath} already exist. Ignored. You can force replace with -f or --force.");

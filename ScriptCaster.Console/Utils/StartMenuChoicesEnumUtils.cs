@@ -8,6 +8,7 @@ public static class StartMenuChoicesEnumUtils
 		new[]
 		{
 			(EStartMenuChoices.ListTemplates, "[cyan]List my templates[/]"),
+			(EStartMenuChoices.SelectTemplate, "[cyan]Select a template[/]"),
 			(EStartMenuChoices.CreateNewTemplate, "[cyan]Create a new template folder[/]"),
 			(EStartMenuChoices.UpdateTemplateVariable, "[cyan]Update the variables of a template[/]"),
 			(EStartMenuChoices.UpdateGlobalVariable, "[cyan]Update the global variables[/]"),

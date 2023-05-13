@@ -1,5 +1,6 @@
 using System.Text;
 using McMaster.Extensions.CommandLineUtils;
+using ScriptCaster.Console;
 using ScriptCaster.Console.CmdControllers;
 using ScriptCaster.Core;
 using ScriptCaster.Core.Enums;
@@ -47,50 +48,55 @@ internal class Program
 
 	private void OnExecute()
 	{
-		Context.InitContext(TemplateName, TemplatesCollectionPath, RecursionLevel, Force, Create);
+		var result = Context.InitContext(TemplateName, TemplatesCollectionPath, RecursionLevel);
+
+		if (!result.TemplateCollectionPathExist)
+		{
+			Logger.LogError($"{TemplatesCollectionPath} does not exist");
+			Logger.LogError("   this is the folder that should contain all the templates");
+			Logger.LogError("   please create this folder ");
+			return;
+		}
 
 		if (List)
 		{
-			Context.ListTemplates();
+			Worker.ListTemplates();
 			return;
 		}
 
 		if (Create)
 		{
-			ScriptCaster.Core.Services.Create.CreateNewTemplate();
-			Logger.LogSuccess($"New template \"{Context.TemplateName}\" created");
-			Logger.Log("Do you want to add variables to your template ? y/n (default=y)");
-			var answer = Console.ReadLine()?.Trim().ToUpper();
-
-			TemplateVariableUpdate = string.IsNullOrEmpty(answer) || answer is "Y" or "YES";
-
-			if (!TemplateVariableUpdate)
-			{
-				return;
-			}
+			Worker.CreateNewTemplate();
+			return;
 		}
 
 		if (TemplateVariableUpdate || GlobalVariableUpdate)
 		{
-			if (TemplateVariableUpdate && string.IsNullOrEmpty(TemplateName))
+			switch (TemplateVariableUpdate)
 			{
-				Logger.LogError("Need the name of the template to update his variables");
-				return;
+				case true when string.IsNullOrEmpty(TemplateName):
+					Logger.LogError("Need the name of the template to update his variables");
+					return;
+				case true:
+					Worker.UpdateVariables(VariableFile.Template);
+					break;
 			}
 
-			var variableFile = TemplateVariableUpdate ? VariableFile.Template : VariableFile.Global;
-			SetVariableCmdController.LaunchVariableSetting(variableFile);
+			if (GlobalVariableUpdate)
+			{
+				Worker.UpdateVariables(VariableFile.Global);
+			}
+
 			return;
 		}
 
 		if (string.IsNullOrEmpty(TemplateName))
 		{
-			MenuCmdController.StartMenu();
+			MenuEngine.StartMenu();
 			return;
 		}
 
-
-		var castCallback = Cast.LaunchCast();
+		var castCallback = Cast.LaunchCast(Force);
 
 		if (castCallback.Success)
 		{

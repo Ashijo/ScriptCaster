@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using ScriptCaster.Core.Callbacks;
 using ScriptCaster.Core.Helpers;
 
 namespace ScriptCaster.Core;
@@ -12,72 +13,51 @@ public static class Context
 	public static string? LocalPath { get; private set; }
 	public static string? GlobalVariablePath => $"{TemplatesCollectionPath}/.variables.json";
 	public static int? RecursionLevel { get; private set; }
-	public static bool Forced { get; private set; }
 	public static bool Initiated { get; private set; }
 
 	//TODO: the default template path shall also be a config in ~/.config/ScriptCaster/config
 	//TODO: Default recursionLevel shall also be a config
-	public static void InitContext(string? templateName,
-		string templatesCollectionPath,
-		int recursionLevel,
-		bool forced,
-		bool created)
+	public static RInitContextCallback InitContext(string? templateName, string templatesCollectionPath,
+		int recursionLevel = 3)
 	{
 		TemplatesCollectionPath = templatesCollectionPath;
 
-		if (templateName == null)
+		if (!string.IsNullOrWhiteSpace(templateName))
 		{
-			return;
+			TemplateName = templateName;
 		}
-
-		TemplateName = templateName;
 
 		if (!Directory.Exists(templatesCollectionPath))
 		{
-			Logger.LogError($"{templatesCollectionPath} does not exist");
-			Logger.LogError("   this is the folder that should contain all the templates");
-			Logger.LogError("   please create the folder then try create a new template with :");
-			Logger.Log($"      sc {templateName} -c", ConsoleColor.Cyan);
-			return;
+			return new RInitContextCallback(false);
 		}
-
-		if (!Directory.Exists(TemplatePath) && !created)
-		{
-			Logger.LogError($"{TemplatePath} does not exist");
-			Logger.LogError("   this is the folder that contain the template and local information about it");
-			Logger.LogError("   You may want to create a new template, here is the command : ");
-			Logger.Log($"      sc {templateName} -c", ConsoleColor.Cyan);
-			return;
-		}
-
 
 		LocalPath = Directory.GetCurrentDirectory();
-
 		RecursionLevel = recursionLevel;
-		Forced = forced;
 
 		Initiated = true;
+
+		return new RInitContextCallback(true);
 	}
 
-	public static void ListTemplates()
+	public static RListTemplateCallback ListTemplates()
 	{
 		Debug.Assert(TemplatesCollectionPath != null,
 			nameof(TemplatesCollectionPath) + " should never be null... But is :<");
 		var templateList = DirectoryHelper.GetDirectoriesName(TemplatesCollectionPath);
 
-		Console.WriteLine($"I found {templateList.Count()} template{(templateList.Count() > 1 ? "s" : "")} :");
+		return new RListTemplateCallback(true, templateList);
+	}
 
-		foreach (var template in templateList)
+	public static RSelectTemplateCallback SelectTemplate(string templateToSelect)
+	{
+		if (!Directory.Exists($"{TemplatesCollectionPath}/{templateToSelect}"))
 		{
-			Console.WriteLine($"   - {template}");
+			return new RSelectTemplateCallback(ESelectTemplateCallbackStatus.NotFound);
 		}
 
-		if (templateList.Any())
-		{
-			return;
-		}
+		TemplateName = templateToSelect;
 
-		Console.WriteLine("   Do not forget that only folders will be considered as template.");
-		Console.WriteLine("If you want to cast file, touch it in a folder");
+		return new RSelectTemplateCallback(ESelectTemplateCallbackStatus.Success);
 	}
 }
