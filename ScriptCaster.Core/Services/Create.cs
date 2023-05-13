@@ -7,8 +7,7 @@ public static class Create
 	{
 		if (Context.TemplatePath == null)
 		{
-			Logger.LogError("New template path not found");
-			return;
+			throw new Exception("New template path not found");
 		}
 
 		var directoryInfo = new DirectoryInfo(Context.TemplatePath);
@@ -21,15 +20,5 @@ public static class Create
 		}
 
 		File.Create(Context.TemplateVariablePath);
-	}
-
-	public static void CreateTemplateFolder()
-	{
-		if (Context.TemplatesCollectionPath == null)
-		{
-			return;
-		}
-
-		var directoryInfo = new DirectoryInfo(Context.TemplatesCollectionPath);
 	}
 }

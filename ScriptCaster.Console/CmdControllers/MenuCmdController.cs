@@ -10,21 +10,22 @@ public static class MenuCmdController
 {
 	public static EStartMenuChoices StartMenu()
 	{
-		var title = new StringBuilder("Welcome to ScriptCaster.");
-		title.Append($"We are working on the folder {Context.TemplatesCollectionPath} ");
+		var title = new StringBuilder();
+		title.AppendLine("Welcome to ScriptCaster.");
+		title.AppendLine($"We are working on the folder {Context.TemplatesCollectionPath} ");
 
 		var templateSelected = !string.IsNullOrWhiteSpace(Context.TemplateName);
 
 		if (templateSelected)
 		{
-			title.Append($"   > Template selected : {Context.TemplateName}");
+			title.AppendLine($"   > Template selected : {Context.TemplateName}");
 		}
 		else
 		{
-			title.Append("   > No Template selected");
+			title.AppendLine("   > No Template selected");
 		}
 
-		title.Append("[cyan]What do you want to do ?[/]");
+		title.AppendLine("[cyan]What do you want to do ?[/]");
 
 		var choicesStrList = StartMenuChoicesEnumUtils.GetStartMenuChoicesStrings();
 
@@ -37,19 +38,34 @@ public static class MenuCmdController
 		return StartMenuChoicesEnumUtils.GetMenuChoiceEnumFromString(command);
 	}
 
-	public static string ChooseATemplateFromList()
+	public static string? ChooseATemplateFromList()
 	{
 		var result = Context.ListTemplates();
 
 		var list = result.Templates;
 
-		//TODO: What if list is empty ?
+		//TODO: manage it better
+		if (!list.Any())
+		{
+			Logger.LogError("Templates folder empty");
+			return null;
+		}
 
-		const string title = "Choose a template :";
+		if (list.Length == 1)
+		{
+			Logger.Log("Only one template found. Auto select " + list.First());
+			return list.First();
+		}
+
+		if (list.Length == 2)
+		{
+			Logger.Log("Ok, this is weird. I have a problem with 2 choices selection prompts, working on it...");
+			return null;
+		}
 
 		return AnsiConsole.Prompt(
 			new SelectionPrompt<string>()
-				.Title(title)
+				.Title("Choose a template :")
 				.PageSize(list.Length)
 				.AddChoices(list));
 	}

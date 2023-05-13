@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Text;
 //TODO: Get ride of newtonsoft
 using Newtonsoft.Json;
 using ScriptCaster.Core.Callbacks;
@@ -97,8 +96,7 @@ public static class Cast
 			{
 				if (!forced)
 				{
-					Logger.LogWarning(
-						$"{resultFilePath} already exist. Ignored. You can force replace with -f or --force.");
+					Console.WriteLine($"{resultFilePath} already exist. Ignored. You can force replace with -f or --force.");
 					continue;
 				}
 			}

@@ -28,7 +28,9 @@ public static class Worker
 	public static void SelectTemplate()
 	{
 		var template = MenuCmdController.ChooseATemplateFromList();
-		//TODO: what if template is null or empty ?
+		
+		if(string.IsNullOrWhiteSpace(template))
+			return;
 
 		Context.SelectTemplate(template);
 	}
