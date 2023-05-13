@@ -1,4 +1,4 @@
-namespace ScriptCaster.Services.Services;
+namespace ScriptCaster.Core.Services;
 
 //Create a new template folder with .variable.json and launch variable setup
 public static class Create

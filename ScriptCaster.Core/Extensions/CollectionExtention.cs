@@ -1,4 +1,4 @@
-namespace ScriptCaster.Services.Extensions;
+namespace ScriptCaster.Core.Extensions;
 
 public static class CollectionExtensions
 {

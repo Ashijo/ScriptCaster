@@ -1,7 +1,7 @@
-using ScriptCaster.Services;
+using ScriptCaster.Core;
 using Spectre.Console;
 
-namespace ScriptCaster.App.CmdController;
+namespace ScriptCaster.Console.CmdController;
 
 public static class MenuCmdController
 {

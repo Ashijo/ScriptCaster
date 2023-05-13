@@ -1,4 +1,4 @@
-namespace ScriptCaster.Services;
+namespace ScriptCaster.Core;
 
 public static class Logger
 {

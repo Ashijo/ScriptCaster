@@ -1,9 +1,9 @@
-using ScriptCaster.Services;
-using ScriptCaster.Services.Enums;
-using ScriptCaster.Services.Services;
+using ScriptCaster.Core;
+using ScriptCaster.Core.Enums;
+using ScriptCaster.Core.Services;
 using Spectre.Console;
 
-namespace ScriptCaster.App.CmdController;
+namespace ScriptCaster.Console.CmdController;
 
 /*
 * Set variable class shall allow me to edit the .variables.json files
@@ -82,7 +82,7 @@ public static class SetVariableCmdController
 			case "quit":
 				return;
 			default:
-				Console.WriteLine("input not understood");
+				System.Console.WriteLine("input not understood");
 				break;
 		}
 

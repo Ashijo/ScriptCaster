@@ -1,8 +1,8 @@
 using McMaster.Extensions.CommandLineUtils;
-using ScriptCaster.App.CmdController;
-using ScriptCaster.Services;
-using ScriptCaster.Services.Enums;
-using ScriptCaster.Services.Services;
+using ScriptCaster.Console.CmdController;
+using ScriptCaster.Core;
+using ScriptCaster.Core.Enums;
+using ScriptCaster.Core.Services;
 
 [Command(Name = "ScriptCaster", Description = "Grab a folder, replace variables and paste it wherever you are")]
 [HelpOption("-?|-h|--help")]
@@ -56,7 +56,7 @@ internal class Program
 
 		if (Create)
 		{
-			ScriptCaster.Services.Services.Create.CreateNewTemplate();
+			ScriptCaster.Core.Services.Create.CreateNewTemplate();
 			Logger.LogSuccess($"New template \"{Context.TemplateName}\" created");
 			Logger.Log("Do you want to add variables to your template ? y/n (default=y)");
 			var answer = Console.ReadLine()?.Trim().ToUpper();

@@ -1,7 +1,7 @@
 using System.Diagnostics;
-using ScriptCaster.Services.Helpers;
+using ScriptCaster.Core.Helpers;
 
-namespace ScriptCaster.Services;
+namespace ScriptCaster.Core;
 
 public static class Context
 {

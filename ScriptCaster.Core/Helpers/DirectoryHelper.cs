@@ -1,4 +1,4 @@
-namespace ScriptCaster.Services.Helpers;
+namespace ScriptCaster.Core.Helpers;
 
 public static class DirectoryHelper
 {

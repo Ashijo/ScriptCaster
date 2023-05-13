@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text.Json;
 
-namespace ScriptCaster.Services.Services;
+namespace ScriptCaster.Core.Services;
 
 public class SetVariable
 {

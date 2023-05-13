@@ -1,4 +1,4 @@
-namespace ScriptCaster.Services.Enums;
+namespace ScriptCaster.Core.Enums;
 
 public enum VariableFile
 {

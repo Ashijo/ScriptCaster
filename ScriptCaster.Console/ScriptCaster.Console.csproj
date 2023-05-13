@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ScriptCaster.services\ScriptCaster.services.csproj" />
+        <ProjectReference Include="..\ScriptCaster.Core\ScriptCaster.Core.csproj" />
     </ItemGroup>
 
 </Project>

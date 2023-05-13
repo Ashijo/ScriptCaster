@@ -1,10 +1,10 @@
 using System.Diagnostics;
 //TODO: Get ride of newtonsoft
 using Newtonsoft.Json;
-using ScriptCaster.Services.Extensions;
-using ScriptCaster.Services.Helpers;
+using ScriptCaster.Core.Helpers;
+using ScriptCaster.Core.Extensions;
 
-namespace ScriptCaster.Services.Services;
+namespace ScriptCaster.Core.Services;
 /*
 Cast shall read the template, the local variable file and the global variable file
 variable files are json dictionary <string,string>, every occurence of the key shall be replace by the value
