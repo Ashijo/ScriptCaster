@@ -11,9 +11,8 @@ public static class StartMenuChoicesEnumUtils
 			(EStartMenuChoices.CreateNewTemplate, "[cyan]Create a new template folder[/]"),
 			(EStartMenuChoices.UpdateTemplateVariable, "[cyan]Update the variables of a template[/]"),
 			(EStartMenuChoices.UpdateGlobalVariable, "[cyan]Update the global variables[/]"),
-			(EStartMenuChoices.Cast, "[cyan]Cast[/]"),
-			(EStartMenuChoices.PreviewCast, "[cyan]Preview a cast[/]"),
-			(EStartMenuChoices.Quit, "[cyan]Quit [/]"),
+			(EStartMenuChoices.Cast, "[cyan]Cast[/]"), (EStartMenuChoices.PreviewCast, "[cyan]Preview a cast[/]"),
+			(EStartMenuChoices.Quit, "[cyan]Quit [/]")
 		};
 
 	public static string[] GetStartMenuChoicesStrings()
@@ -31,7 +30,7 @@ public static class StartMenuChoicesEnumUtils
 		var result = _startMenuChoices.First(c => c.Value == value).Key;
 		if (!Enum.IsDefined(result))
 		{
-			throw new Exception($"Internal error: MenuChoice does not exist in {nameof(StartMenuChoicesEnumUtils)}");	
+			throw new Exception($"Internal error: MenuChoice does not exist in {nameof(StartMenuChoicesEnumUtils)}");
 		}
 
 		return result;
@@ -41,9 +40,9 @@ public static class StartMenuChoicesEnumUtils
 	{
 		if (!Enum.IsDefined(key))
 		{
-			throw new Exception($"Internal error: MenuChoice does not exist in {nameof(StartMenuChoicesEnumUtils)}");	
+			throw new Exception($"Internal error: MenuChoice does not exist in {nameof(StartMenuChoicesEnumUtils)}");
 		}
-		
+
 		return _startMenuChoices.First(c => c.Key == key).Value;
 	}
 }

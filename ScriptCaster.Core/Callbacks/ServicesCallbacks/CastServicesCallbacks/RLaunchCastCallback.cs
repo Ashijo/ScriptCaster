@@ -4,4 +4,4 @@ public record RLaunchCastCallback(
 	bool Success,
 	bool ContextInitialized,
 	RValidateVariablesCallback? ValidateVariablesCallback
-	);
+);

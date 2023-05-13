@@ -169,9 +169,9 @@ public static class Cast
 		{
 			return new RValidateVariablesCallback(true, true, true);
 		}
-		
-		return new RValidateVariablesCallback(false, 
-			variables != null, 
+
+		return new RValidateVariablesCallback(false,
+			variables != null,
 			templateVariables != null);
 	}
 

@@ -14,20 +14,24 @@ public static class ErrorCmdController
 		}
 
 		if (castCallback.ValidateVariablesCallback != null)
+		{
 			PromptValidateVariablesCallbackError(castCallback.ValidateVariablesCallback);
+		}
 	}
 
 	private static void PromptValidateVariablesCallbackError(RValidateVariablesCallback validateVariablesCallback)
 	{
-		if(validateVariablesCallback.Success)
+		if (validateVariablesCallback.Success)
+		{
 			return;
-		
+		}
+
 		var fileNotExistsInGlobalMsg = $"global folder ({Context.GlobalVariablePath}) ";
 		var fileNotExistsInTemplateMsg = $"template folder ({Context.TemplateVariablePath}) ";
 
 		var fileNotExistsInGlobal = !validateVariablesCallback.FileExistsInGlobal;
 		var fileNotExistsInTemplate = !validateVariablesCallback.FileExistsInTemplate;
-			
+
 		var fileNotExistsIn = fileNotExistsInGlobal
 			? fileNotExistsInTemplate
 				? $"{fileNotExistsInGlobalMsg} and {fileNotExistsInTemplateMsg}"
@@ -41,7 +45,7 @@ public static class ErrorCmdController
 		cmdSuggestion.Append(" -");
 		cmdSuggestion.Append(fileNotExistsInGlobal ? "g" : "");
 		cmdSuggestion.Append(fileNotExistsInTemplate ? "t" : "");
-		
+
 		Logger.Log(cmdSuggestion.ToString(), ConsoleColor.Cyan);
 	}
 

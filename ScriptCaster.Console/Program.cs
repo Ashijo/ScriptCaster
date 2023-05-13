@@ -97,8 +97,7 @@ internal class Program
 			Logger.LogSuccess("Cast finished");
 			return;
 		}
-		
+
 		ErrorCmdController.PromptCastCallbackError(castCallback);
-		
 	}
 }

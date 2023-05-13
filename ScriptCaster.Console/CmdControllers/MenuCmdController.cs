@@ -15,7 +15,7 @@ public static class MenuCmdController
 		title.Append("[cyan]What do you want to do ?[/]");
 
 		var choicesStrList = StartMenuChoicesEnumUtils.GetStartMenuChoicesStrings();
-		
+
 		var command = AnsiConsole.Prompt(
 			new SelectionPrompt<string>()
 				.Title(title.ToString())

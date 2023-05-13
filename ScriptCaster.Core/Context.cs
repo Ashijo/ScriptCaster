@@ -17,14 +17,14 @@ public static class Context
 
 	//TODO: the default template path shall also be a config in ~/.config/ScriptCaster/config
 	//TODO: Default recursionLevel shall also be a config
-	public static void InitContext(string? templateName, 
-		string templatesCollectionPath, 
+	public static void InitContext(string? templateName,
+		string templatesCollectionPath,
 		int recursionLevel,
 		bool forced,
 		bool created)
 	{
 		TemplatesCollectionPath = templatesCollectionPath;
-		
+
 		if (templateName == null)
 		{
 			return;
