@@ -12,8 +12,8 @@ public class SetVariable
 		try
 		{
 			ActualVariables = JsonSerializer.Deserialize<Dictionary<string, string>?>(
-								  File.OpenRead(Path))
-							  ?? new Dictionary<string, string>();
+				                  File.OpenRead(Path))
+			                  ?? new Dictionary<string, string>();
 		}
 		catch (JsonException)
 		{
@@ -35,7 +35,11 @@ public class SetVariable
 	/// <returns>true if the element is successfully added; False if the key already existed</returns>
 	public bool AddVariableToBuffer(string name, string value)
 	{
-		if (VariablesBuffer.ContainsKey(name)) return false;
+		if (VariablesBuffer.ContainsKey(name))
+		{
+			return false;
+		}
+
 		VariablesBuffer.Add(name, value);
 		return true;
 	}
@@ -61,7 +65,10 @@ public class SetVariable
 	/// <returns>False if key doesn't exist</returns>
 	public bool EditVariableToBuffer(string name, string value)
 	{
-		if (!VariablesBuffer.ContainsKey(name)) return false;
+		if (!VariablesBuffer.ContainsKey(name))
+		{
+			return false;
+		}
 
 		VariablesBuffer[name] = value;
 
@@ -84,8 +91,8 @@ public class SetVariable
 		File.WriteAllText(Path, jsonBufferVariable);
 
 		ActualVariables = JsonSerializer.Deserialize<Dictionary<string, string>?>(
-							  File.OpenRead(Path))
-						  ?? new Dictionary<string, string>();
+			                  File.OpenRead(Path))
+		                  ?? new Dictionary<string, string>();
 
 		return new Dictionary<string, string>(ActualVariables);
 	}

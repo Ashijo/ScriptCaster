@@ -13,7 +13,10 @@ public static class CollectionExtensions
 	{
 		dicToAdd.ForEach(x =>
 		{
-			if (!dic.ContainsKey(x.Key)) dic.Add(x.Key, x.Value);
+			if (!dic.ContainsKey(x.Key))
+			{
+				dic.Add(x.Key, x.Value);
+			}
 		});
 	}
 
@@ -36,7 +39,9 @@ public static class CollectionExtensions
 	private static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
 	{
 		foreach (var item in source)
+		{
 			action(item);
+		}
 	}
 
 	private static void ForEachOrBreak<T>(this IEnumerable<T> source, Func<T, bool> func)
@@ -44,7 +49,10 @@ public static class CollectionExtensions
 		foreach (var item in source)
 		{
 			var result = func(item);
-			if (result) break;
+			if (result)
+			{
+				break;
+			}
 		}
 	}
 }

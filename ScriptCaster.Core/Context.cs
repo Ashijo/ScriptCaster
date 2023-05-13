@@ -17,10 +17,14 @@ public static class Context
 
 	//TODO: the default template path shall also be a config in ~/.config/ScriptCaster/config
 	//TODO: Default recursionLevel shall also be a config
-	public static void InitContext(string? templateName, string templatesCollectionPath, int recursionLevel, bool forced,
+	public static void InitContext(string? templateName, string templatesCollectionPath, int recursionLevel,
+		bool forced,
 		bool created)
 	{
-		if (templateName == null) return;
+		if (templateName == null)
+		{
+			return;
+		}
 
 		TemplatesCollectionPath = templatesCollectionPath;
 		TemplateName = templateName;
@@ -54,14 +58,21 @@ public static class Context
 
 	public static void ListTemplates()
 	{
-		Debug.Assert(TemplatesCollectionPath != null, nameof(TemplatesCollectionPath) + " should never be null... But is :<");
+		Debug.Assert(TemplatesCollectionPath != null,
+			nameof(TemplatesCollectionPath) + " should never be null... But is :<");
 		var templateList = DirectoryHelper.GetDirectoriesName(TemplatesCollectionPath);
 
 		Console.WriteLine($"I found {templateList.Count()} template{(templateList.Count() > 1 ? "s" : "")} :");
 
-		foreach (var template in templateList) Console.WriteLine($"   - {template}");
+		foreach (var template in templateList)
+		{
+			Console.WriteLine($"   - {template}");
+		}
 
-		if (templateList.Any()) return;
+		if (templateList.Any())
+		{
+			return;
+		}
 
 		Console.WriteLine("   Do not forget that only folders will be considered as template.");
 		Console.WriteLine("If you want to cast file, touch it in a folder");

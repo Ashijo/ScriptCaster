@@ -29,7 +29,10 @@ public static class Cast
 {
 	public static void LaunchCast()
 	{
-		if (!Context.Initiated) return;
+		if (!Context.Initiated)
+		{
+			return;
+		}
 
 		Debug.Assert(Context.GlobalVariablePath != null, "GlobalVariablePath is null in Cast.LaunchCast");
 		var variables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
@@ -39,7 +42,10 @@ public static class Cast
 		var templateVariables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
 			File.ReadAllText(Context.TemplateVariablePath));
 
-		if (!ValidateVariables(variables, templateVariables)) return;
+		if (!ValidateVariables(variables, templateVariables))
+		{
+			return;
+		}
 
 		Debug.Assert(variables != null && templateVariables != null, "ValidateVariables() failed");
 		variables.AddRangeOverride(templateVariables); // Global variables can be override by local variables
@@ -61,8 +67,10 @@ public static class Cast
 				.Replace("\n", "");
 
 			for (var i = 0; i < Context.RecursionLevel; i++)
+			{
 				resultFolder = variables.Aggregate(resultFolder,
 					(current, kv) => current.Replace(kv.Key, kv.Value));
+			}
 
 			Directory.CreateDirectory(resultFolder);
 		}
@@ -80,14 +88,19 @@ public static class Cast
 			var resultFileExist = File.Exists(resultFilePath);
 
 			if (resultFileExist && !Context.Forced)
+			{
 				if (!Context.Forced)
 				{
 					Logger.LogWarning(
 						$"{resultFilePath} already exist. Ignored. You can force replace with -f or --force.");
 					continue;
 				}
+			}
 
-			if (resultFileExist) Directory.Delete(resultFilePath);
+			if (resultFileExist)
+			{
+				Directory.Delete(resultFilePath);
+			}
 
 			var fileContent = File.ReadAllText(tFilePath);
 
@@ -135,7 +148,10 @@ public static class Cast
 	{
 		var files = new List<string>();
 		foreach (var folderPath in templateFolders)
+		{
 			files.AddRange(DirectoryHelper.GetAllFilesWithoutConfigs(folderPath));
+		}
+
 		return files.ToArray();
 	}
 
@@ -144,7 +160,10 @@ public static class Cast
 	private static bool ValidateVariables(Dictionary<string, string>? variables,
 		Dictionary<string, string>? templateVariables)
 	{
-		if (variables != null && templateVariables != null) return true;
+		if (variables != null && templateVariables != null)
+		{
+			return true;
+		}
 
 		var fileNotExistsInGlobal = variables == null;
 		var fileNotExistsInTemplate = templateVariables == null;

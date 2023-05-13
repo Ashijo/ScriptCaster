@@ -63,7 +63,10 @@ internal class Program
 
 			TemplateVariableUpdate = string.IsNullOrEmpty(answer) || answer is "Y" or "YES";
 
-			if (!TemplateVariableUpdate) return;
+			if (!TemplateVariableUpdate)
+			{
+				return;
+			}
 		}
 
 		if (TemplateVariableUpdate || GlobalVariableUpdate)

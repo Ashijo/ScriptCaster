@@ -111,7 +111,10 @@ public static class SetVariableCmdController
 		table.AddColumn(new TableColumn("Key").Centered());
 		table.AddColumn(new TableColumn("Value").Centered());
 
-		foreach (var keyValuePair in actualVariables) table.AddRow(keyValuePair.Key, keyValuePair.Value);
+		foreach (var keyValuePair in actualVariables)
+		{
+			table.AddRow(keyValuePair.Key, keyValuePair.Value);
+		}
 
 		return table;
 	}
@@ -120,19 +123,28 @@ public static class SetVariableCmdController
 	{
 		var success = SetVariableServices[_currentTarget].AddVariableToBuffer(newVariableName, newVariableValue);
 
-		if (!success) AnsiConsole.Confirm("The variable already exist in the buffer.. Operation cancelled.");
+		if (!success)
+		{
+			AnsiConsole.Confirm("The variable already exist in the buffer.. Operation cancelled.");
+		}
 	}
 
 	private static void Remove(string key)
 	{
 		var success = SetVariableServices[_currentTarget].RemoveVariableToBuffer(key);
-		if (!success) AnsiConsole.Confirm("The variable key didn't exist in the buffer.");
+		if (!success)
+		{
+			AnsiConsole.Confirm("The variable key didn't exist in the buffer.");
+		}
 	}
 
 	private static void Edit(string editKey, string editValue)
 	{
 		var success = SetVariableServices[_currentTarget].EditVariableToBuffer(editKey, editValue);
-		if (!success) AnsiConsole.Confirm("Variable not found :/");
+		if (!success)
+		{
+			AnsiConsole.Confirm("Variable not found :/");
+		}
 	}
 
 	private static void Write()

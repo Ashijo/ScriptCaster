@@ -9,7 +9,8 @@ public static class MenuCmdController
 	{
 		var command = AnsiConsole.Prompt(
 			new SelectionPrompt<string>()
-				.Title($"Welcome to ScriptCaster. We are working on the folder {Context.TemplatesCollectionPath} [cyan]What do you want to do ?[/]")
+				.Title(
+					$"Welcome to ScriptCaster. We are working on the folder {Context.TemplatesCollectionPath} [cyan]What do you want to do ?[/]")
 				.PageSize(8)
 				.AddChoices(
 					"[cyan]List my templates[/]",
