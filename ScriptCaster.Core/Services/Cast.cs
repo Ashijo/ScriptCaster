@@ -1,6 +1,8 @@
 using System.Diagnostics;
+using System.Text;
 //TODO: Get ride of newtonsoft
 using Newtonsoft.Json;
+using ScriptCaster.Core.Callbacks;
 using ScriptCaster.Core.Helpers;
 using ScriptCaster.Core.Extensions;
 
@@ -27,11 +29,11 @@ Nice to have (maybe?) :
 
 public static class Cast
 {
-	public static void LaunchCast()
+	public static RLaunchCastCallback LaunchCast()
 	{
 		if (!Context.Initiated)
 		{
-			return;
+			return new RLaunchCastCallback(false, false, null);
 		}
 
 		Debug.Assert(Context.GlobalVariablePath != null, "GlobalVariablePath is null in Cast.LaunchCast");
@@ -42,9 +44,10 @@ public static class Cast
 		var templateVariables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
 			File.ReadAllText(Context.TemplateVariablePath));
 
-		if (!ValidateVariables(variables, templateVariables))
+		var validationCallback = ValidateVariables(variables, templateVariables);
+		if (!validationCallback.Success)
 		{
-			return;
+			return new RLaunchCastCallback(false, true, validationCallback);
 		}
 
 		Debug.Assert(variables != null && templateVariables != null, "ValidateVariables() failed");
@@ -55,6 +58,8 @@ public static class Cast
 
 		CreateFolders(variables, templateFolders);
 		CreateFiles(variables, filesInTemplate);
+
+		return new RLaunchCastCallback(true, true, validationCallback);
 	}
 
 	private static void CreateFolders(Dictionary<string, string> variables, string[] templatesFolders)
@@ -157,33 +162,17 @@ public static class Cast
 
 	#region Validations
 
-	private static bool ValidateVariables(Dictionary<string, string>? variables,
+	private static RValidateVariablesCallback ValidateVariables(Dictionary<string, string>? variables,
 		Dictionary<string, string>? templateVariables)
 	{
 		if (variables != null && templateVariables != null)
 		{
-			return true;
+			return new RValidateVariablesCallback(true, true, true);
 		}
-
-		var fileNotExistsInGlobal = variables == null;
-		var fileNotExistsInTemplate = templateVariables == null;
-
-		var fileNotExistsInGlobalMsg = $"global folder ({Context.GlobalVariablePath}) ";
-		var fileNotExistsInTemplateMsg = $"template folder ({Context.TemplateVariablePath}) ";
-
-		var fileNotExistsIn = fileNotExistsInGlobal
-			? fileNotExistsInTemplate
-				? $"{fileNotExistsInGlobalMsg} and {fileNotExistsInTemplateMsg}"
-				: fileNotExistsInGlobalMsg
-			: fileNotExistsInTemplateMsg;
-
-		Logger.LogError($".variables.json does not exists in {fileNotExistsIn}.");
-		Logger.LogWarning("You can create it running :");
-		Logger.Log(
-			$"   sc {(fileNotExistsInTemplate ? "<TemplateName>" : "")} -{(fileNotExistsInGlobal ? "g" : "")}{(fileNotExistsInTemplate ? "t" : "")}",
-			ConsoleColor.Cyan);
-
-		return false;
+		
+		return new RValidateVariablesCallback(false, 
+			variables != null, 
+			templateVariables != null);
 	}
 
 	#endregion

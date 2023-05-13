@@ -3,7 +3,7 @@ using ScriptCaster.Core.Enums;
 using ScriptCaster.Core.Services;
 using Spectre.Console;
 
-namespace ScriptCaster.Console.CmdController;
+namespace ScriptCaster.Console.CmdControllers;
 
 /*
 * Set variable class shall allow me to edit the .variables.json files

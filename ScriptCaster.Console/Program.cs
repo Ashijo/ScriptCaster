@@ -1,5 +1,6 @@
+using System.Text;
 using McMaster.Extensions.CommandLineUtils;
-using ScriptCaster.Console.CmdController;
+using ScriptCaster.Console.CmdControllers;
 using ScriptCaster.Core;
 using ScriptCaster.Core.Enums;
 using ScriptCaster.Core.Services;
@@ -32,7 +33,7 @@ internal class Program
 	//TODO: get the default recursive from .config
 	[Option(Description =
 		"The number of time parsing will be done on every text, bigger it is the more depth you can have in variables references")]
-	private int Recursivity { get; } = 3;
+	private int RecursionLevel { get; } = 3;
 
 	//TODO: get the default path from .config
 	[Option("-p|--path", Description = "Path of the folder containing the template")]
@@ -46,7 +47,7 @@ internal class Program
 
 	private void OnExecute()
 	{
-		Context.InitContext(TemplateName, TemplatesCollectionPath, Recursivity, Force, Create);
+		Context.InitContext(TemplateName, TemplatesCollectionPath, RecursionLevel, Force, Create);
 
 		if (List)
 		{
@@ -89,6 +90,15 @@ internal class Program
 		}
 
 
-		Cast.LaunchCast();
+		var castCallback = Cast.LaunchCast();
+
+		if (castCallback.Success)
+		{
+			Logger.LogSuccess("Cast finished");
+			return;
+		}
+		
+		ErrorCmdController.PromptCastCallbackError(castCallback);
+		
 	}
 }

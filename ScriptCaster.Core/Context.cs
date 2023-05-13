@@ -10,23 +10,26 @@ public static class Context
 	public static string? TemplatePath => $"{TemplatesCollectionPath}/{TemplateName}";
 	public static string? TemplateVariablePath => $"{TemplatePath}/.variables.json";
 	public static string? LocalPath { get; private set; }
-	public static string? GlobalVariablePath => "{TemplatesCollectionPath}/.variables.json";
+	public static string? GlobalVariablePath => $"{TemplatesCollectionPath}/.variables.json";
 	public static int? RecursionLevel { get; private set; }
 	public static bool Forced { get; private set; }
 	public static bool Initiated { get; private set; }
 
 	//TODO: the default template path shall also be a config in ~/.config/ScriptCaster/config
 	//TODO: Default recursionLevel shall also be a config
-	public static void InitContext(string? templateName, string templatesCollectionPath, int recursionLevel,
+	public static void InitContext(string? templateName, 
+		string templatesCollectionPath, 
+		int recursionLevel,
 		bool forced,
 		bool created)
 	{
+		TemplatesCollectionPath = templatesCollectionPath;
+		
 		if (templateName == null)
 		{
 			return;
 		}
 
-		TemplatesCollectionPath = templatesCollectionPath;
 		TemplateName = templateName;
 
 		if (!Directory.Exists(templatesCollectionPath))
