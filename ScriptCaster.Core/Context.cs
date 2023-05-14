@@ -13,7 +13,7 @@ public static class Context
 	public static string TemplateVariablePath => $"{TemplatePath}/.variables.json";
 	public static string GlobalVariablePath => $"{TemplatesCollectionPath}/.variables.json";
 	public static int? RecursionLevel { get; private set; }
-	public static bool Initiated { get; private set; }
+	public static bool Initialized { get; private set; }
 
 	//TODO: the default template path shall also be a config in ~/.config/ScriptCaster/config
 	//TODO: Default recursionLevel shall also be a config
@@ -35,7 +35,7 @@ public static class Context
 		LocalPath = Directory.GetCurrentDirectory();
 		RecursionLevel = recursionLevel;
 
-		Initiated = true;
+		Initialized = true;
 
 		return new RInitContextCallback(true);
 	}

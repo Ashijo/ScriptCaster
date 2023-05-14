@@ -13,7 +13,7 @@ public static class Create
 
 		var directoryInfo = new DirectoryInfo($"{Context.TemplatePath}/{templateName}");
 		directoryInfo.Create();
-		
+
 		Context.SelectTemplate(templateName);
 
 		if (string.IsNullOrWhiteSpace(Context.TemplateVariablePath))

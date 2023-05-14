@@ -10,23 +10,29 @@ public static partial class Cast
 {
 	public static RLaunchCastCallback LaunchCast(bool force)
 	{
+		if (!Context.Initialized)
+		{
+			return new RLaunchCastCallback(false, false);
+		}
 
 		var variablesCallback = GetVariables();
 
-		if(!variablesCallback.Success)
+		if (!variablesCallback.Success)
+		{
 			return new RLaunchCastCallback(false, true, variablesCallback);
+		}
 
 		var fluidModel = variablesCallback.Variables!;
-		
+
 		var context = new TemplateContext(fluidModel);
-		
+
 		var templateFolders = GetAllFolders();
 		var filesInTemplate = GetAllFiles(templateFolders);
-		
+
 		CreateFolders(fluidModel, templateFolders);
 		CreateFilesNew(context, filesInTemplate, force);
-		
-		return new RLaunchCastCallback(false, false);
+
+		return new RLaunchCastCallback(true, true);
 	}
 
 	private static RValidateVariablesCallback GetVariables()
@@ -38,19 +44,19 @@ public static partial class Cast
 		Debug.Assert(Context.TemplateVariablePath != null, "TemplateVariablePath is null in Cast.LaunchCast");
 		var templateVariables = JsonSerializer.Deserialize<Dictionary<string, string>>(
 			File.ReadAllText(Context.TemplateVariablePath));
-		
+
 		var validationCallback = ValidateVariables(variables, templateVariables);
 		if (!validationCallback.Success)
 		{
 			return validationCallback;
 		}
-		
+
 		Debug.Assert(variables != null && templateVariables != null, "ValidateVariables() failed");
 		variables.AddRangeOverride(templateVariables); // Global variables can be override by local variables
 
 		return new RValidateVariablesCallback(true, true, true, variables);
 	}
-	
+
 	private static void CreateFilesNew(TemplateContext fluidContext, string[] filesInTemplate,
 		bool forced = false)
 	{
@@ -82,22 +88,14 @@ public static partial class Cast
 
 			var fileContent = File.ReadAllText(tFilePath);
 			
-			if (parser.TryParse(fileContent, out var template, out var error))
-			{
-				fileContent = template.Render(fluidContext);
-			}
-
-/*
 			for (var i = 0; i < Context.RecursionLevel; i++)
 			{
-				Debug.Assert(variables != null, "variables is null");
-				foreach (var kv in variables)
+				if (parser.TryParse(fileContent, out var template, out var error))
 				{
-					resultFilePath = resultFilePath.Replace(kv.Key, kv.Value);
-					fileContent = fileContent.Replace(kv.Key, kv.Value);
+					fileContent = template.Render(fluidContext);
 				}
 			}
-*/
+
 			using var stream = File.CreateText(resultFilePath);
 			stream.Write(fileContent);
 			stream.Close();

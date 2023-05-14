@@ -13,25 +13,13 @@ TODO: Split on '%'
 
 TODO: Separator defined in global config ?
 would need to fork liquid for that... Maybe one day
-
-TODO: default keys to add:
-    %NEWGUID%
-    %DATE%
-
-TODO: Format with pipes (eg : %FOO | Capitalize%)
-
-Nice to have (maybe?) :
-    Logical variable : use reflexion to execute a C# function define in other variable script
-    Bash variable : set variable as the result of a bash command
-    Dynamic values : Change variable files from dictionary <string,string> to dictionary <string, string | dictionary>
-        Could be reference by %FOO.BOO% or %FOO%.%BOO%
 */
 
 public static partial class Cast
 {
 	public static RLaunchCastCallback LaunchOldCast(bool force = false)
 	{
-		if (!Context.Initiated)
+		if (!Context.Initialized)
 		{
 			return new RLaunchCastCallback(false, false);
 		}
@@ -43,13 +31,13 @@ public static partial class Cast
 		Debug.Assert(Context.TemplateVariablePath != null, "TemplateVariablePath is null in Cast.LaunchCast");
 		var templateVariables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
 			File.ReadAllText(Context.TemplateVariablePath));
-		
+
 		var validationCallback = ValidateVariables(variables, templateVariables);
 		if (!validationCallback.Success)
 		{
 			return new RLaunchCastCallback(false, true, validationCallback);
 		}
-		
+
 		Debug.Assert(variables != null && templateVariables != null, "ValidateVariables() failed");
 		variables.AddRangeOverride(templateVariables); // Global variables can be override by local variables
 
@@ -152,6 +140,8 @@ public static partial class Cast
 	//But also harder to read
 	private static string[] GetAllFiles(string[] templateFolders)
 	{
+		// BUG: Doesn't get de files in the root folder of template
+		
 		var files = new List<string>();
 		foreach (var folderPath in templateFolders)
 		{
@@ -160,7 +150,7 @@ public static partial class Cast
 
 		return files.ToArray();
 	}
-	
+
 	#region Validations
 
 	private static RValidateVariablesCallback ValidateVariables(Dictionary<string, string>? variables,
@@ -177,5 +167,4 @@ public static partial class Cast
 	}
 
 	#endregion
-	
 }
