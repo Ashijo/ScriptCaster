@@ -27,13 +27,13 @@ Nice to have (maybe?) :
         Could be reference by %FOO.BOO% or %FOO%.%BOO%
 */
 
-public static class Cast
+public static partial class Cast
 {
-	public static RLaunchCastCallback LaunchCast(bool force = false)
+	public static RLaunchCastCallback LaunchOldCast(bool force = false)
 	{
 		if (!Context.Initiated)
 		{
-			return new RLaunchCastCallback(false, false, null);
+			return new RLaunchCastCallback(false, false);
 		}
 
 		Debug.Assert(Context.GlobalVariablePath != null, "GlobalVariablePath is null in Cast.LaunchCast");
@@ -43,13 +43,13 @@ public static class Cast
 		Debug.Assert(Context.TemplateVariablePath != null, "TemplateVariablePath is null in Cast.LaunchCast");
 		var templateVariables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
 			File.ReadAllText(Context.TemplateVariablePath));
-
+		
 		var validationCallback = ValidateVariables(variables, templateVariables);
 		if (!validationCallback.Success)
 		{
 			return new RLaunchCastCallback(false, true, validationCallback);
 		}
-
+		
 		Debug.Assert(variables != null && templateVariables != null, "ValidateVariables() failed");
 		variables.AddRangeOverride(templateVariables); // Global variables can be override by local variables
 
@@ -59,7 +59,7 @@ public static class Cast
 		CreateFolders(variables, templateFolders);
 		CreateFiles(variables, filesInTemplate, force);
 
-		return new RLaunchCastCallback(true, true, validationCallback);
+		return new RLaunchCastCallback(true, true);
 	}
 
 	private static void CreateFolders(Dictionary<string, string> variables, string[] templatesFolders)
@@ -160,7 +160,7 @@ public static class Cast
 
 		return files.ToArray();
 	}
-
+	
 	#region Validations
 
 	private static RValidateVariablesCallback ValidateVariables(Dictionary<string, string>? variables,
@@ -177,4 +177,5 @@ public static class Cast
 	}
 
 	#endregion
+	
 }

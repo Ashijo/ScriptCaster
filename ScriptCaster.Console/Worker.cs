@@ -68,7 +68,7 @@ public static class Worker
 
 	public static void Cast()
 	{
-		Core.Services.Cast.LaunchCast();
+		Core.Services.Cast.LaunchOldCast();
 	}
 
 	public static void PreviewCast()
