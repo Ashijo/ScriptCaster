@@ -1,6 +1,5 @@
 using System.Diagnostics;
-//TODO: Get ride of newtonsoft
-using Newtonsoft.Json;
+using System.Text.Json;
 using ScriptCaster.Core.Callbacks;
 using ScriptCaster.Core.Helpers;
 using ScriptCaster.Core.Extensions;
@@ -25,11 +24,11 @@ public static partial class Cast
 		}
 
 		Debug.Assert(Context.GlobalVariablePath != null, "GlobalVariablePath is null in Cast.LaunchCast");
-		var variables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
+		var variables = JsonSerializer.Deserialize<Dictionary<string, string>>(
 			File.ReadAllText(Context.GlobalVariablePath));
 
 		Debug.Assert(Context.TemplateVariablePath != null, "TemplateVariablePath is null in Cast.LaunchCast");
-		var templateVariables = JsonConvert.DeserializeObject<Dictionary<string, string>>(
+		var templateVariables = JsonSerializer.Deserialize<Dictionary<string, string>>(
 			File.ReadAllText(Context.TemplateVariablePath));
 
 		var validationCallback = ValidateVariables(variables, templateVariables);
