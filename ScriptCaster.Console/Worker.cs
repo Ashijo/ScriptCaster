@@ -40,13 +40,13 @@ public static class Worker
 	public static void CreateNewTemplate()
 	{
 		var templateName = Context.TemplateName;
-		
+
 		while (string.IsNullOrWhiteSpace(templateName))
 		{
 			System.Console.WriteLine("No template name defined, please enter a name :");
 			templateName = System.Console.ReadLine();
 		}
-		
+
 		Create.CreateNewTemplate(templateName);
 
 		Logger.LogSuccess($"New template \"{templateName}\" created");

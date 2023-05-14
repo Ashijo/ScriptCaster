@@ -10,9 +10,11 @@ public static class Create
 			throw new Exception("New template name invalid");
 		}
 
-		
-		var directoryInfo = new DirectoryInfo(Context.TemplatePath);
+
+		var directoryInfo = new DirectoryInfo($"{Context.TemplatePath}/{templateName}");
 		directoryInfo.Create();
+		
+		Context.SelectTemplate(templateName);
 
 		if (string.IsNullOrWhiteSpace(Context.TemplateVariablePath))
 		{
@@ -21,6 +23,5 @@ public static class Create
 		}
 
 		File.Create(Context.TemplateVariablePath);
-		Context.SelectTemplate(templateName);
 	}
 }
