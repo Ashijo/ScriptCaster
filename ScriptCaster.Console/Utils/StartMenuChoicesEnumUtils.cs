@@ -12,7 +12,9 @@ public static class StartMenuChoicesEnumUtils
 			(EStartMenuChoices.CreateNewTemplate, "[cyan]Create a new template folder[/]"),
 			(EStartMenuChoices.UpdateTemplateVariable, "[cyan]Update the variables of a template[/]"),
 			(EStartMenuChoices.UpdateGlobalVariable, "[cyan]Update the global variables[/]"),
-			(EStartMenuChoices.Cast, "[cyan]Cast[/]"), (EStartMenuChoices.PreviewCast, "[cyan]Preview a cast[/]"),
+			(EStartMenuChoices.Cast, "[cyan]Cast[/]"),
+			(EStartMenuChoices.CastForce, "[cyan]Cast force (will override existing files, use with caution)[/]"),
+			(EStartMenuChoices.PreviewCast, "[cyan]Preview a cast[/] [red](NOT IMPLEMENTED)[/]"),
 			(EStartMenuChoices.Quit, "[cyan]Quit [/]")
 		};
 

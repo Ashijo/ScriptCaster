@@ -33,6 +33,9 @@ public static class MenuEngine
 				case EStartMenuChoices.Cast:
 					Worker.Cast();
 					break;
+				case EStartMenuChoices.CastForce:
+					Worker.Cast(true);
+					break;
 				case EStartMenuChoices.PreviewCast:
 					Worker.PreviewCast();
 					break;

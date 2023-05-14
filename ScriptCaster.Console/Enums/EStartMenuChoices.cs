@@ -8,6 +8,7 @@ public enum EStartMenuChoices
 	UpdateTemplateVariable,
 	UpdateGlobalVariable,
 	Cast,
+	CastForce,
 	PreviewCast,
 	Quit
 }

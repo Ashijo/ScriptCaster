@@ -66,9 +66,9 @@ public static class Worker
 		SetVariableCmdController.LaunchVariableSetting(eVariableFile);
 	}
 
-	public static void Cast()
+	public static void Cast(bool force = false)
 	{
-		Core.Services.Cast.LaunchOldCast();
+		Core.Services.Cast.LaunchCast(force);
 	}
 
 	public static void PreviewCast()

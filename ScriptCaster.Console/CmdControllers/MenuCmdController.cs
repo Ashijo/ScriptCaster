@@ -58,8 +58,10 @@ public static class MenuCmdController
 		}
 
 		//for a weird reason Selection Prompt cannot let you choose between 2 choices
-		var trick = list.Append("none")?.ToArray() ?? throw new Exception("should never append");
-
+		var trick = list.Length == 2
+			? list.Append("I hate you spectre [red]This choice is a bug[/]").ToArray()
+			: list;
+		
 		return AnsiConsole.Prompt(
 			new SelectionPrompt<string>()
 				.Title("Choose a template :")
