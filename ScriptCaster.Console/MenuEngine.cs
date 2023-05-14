@@ -25,10 +25,10 @@ public static class MenuEngine
 					Worker.CreateNewTemplate();
 					break;
 				case EStartMenuChoices.UpdateTemplateVariable:
-					Worker.UpdateVariables(VariableFile.Template);
+					Worker.UpdateVariables(EVariableFile.Template);
 					break;
 				case EStartMenuChoices.UpdateGlobalVariable:
-					Worker.UpdateVariables(VariableFile.Global);
+					Worker.UpdateVariables(EVariableFile.Global);
 					break;
 				case EStartMenuChoices.Cast:
 					Worker.Cast();

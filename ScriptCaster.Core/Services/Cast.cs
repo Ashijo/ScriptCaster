@@ -11,7 +11,8 @@ Cast shall read the template, the local variable file and the global variable fi
 variable files are json dictionary <string,string>, every occurence of the key shall be replace by the value
 TODO: Split on '%'
 
-TODO: Separator defined in global config
+TODO: Separator defined in global config ?
+would need to fork liquid for that... Maybe one day
 
 TODO: default keys to add:
     %NEWGUID%
@@ -96,7 +97,8 @@ public static class Cast
 			{
 				if (!forced)
 				{
-					Console.WriteLine($"{resultFilePath} already exist. Ignored. You can force replace with -f or --force.");
+					Console.WriteLine(
+						$"{resultFilePath} already exist. Ignored. You can force replace with -f or --force.");
 					continue;
 				}
 			}

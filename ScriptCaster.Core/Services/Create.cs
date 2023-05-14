@@ -3,22 +3,24 @@ namespace ScriptCaster.Core.Services;
 //Create a new template folder with .variable.json and launch variable setup
 public static class Create
 {
-	public static void CreateNewTemplate()
+	public static void CreateNewTemplate(string templateName)
 	{
-		if (Context.TemplatePath == null)
+		if (string.IsNullOrWhiteSpace(templateName))
 		{
-			throw new Exception("New template path not found");
+			throw new Exception("New template name invalid");
 		}
 
+		
 		var directoryInfo = new DirectoryInfo(Context.TemplatePath);
 		directoryInfo.Create();
 
-		if (Context.TemplateVariablePath == null)
+		if (string.IsNullOrWhiteSpace(Context.TemplateVariablePath))
 		{
 			directoryInfo.Delete();
 			return;
 		}
 
 		File.Create(Context.TemplateVariablePath);
+		Context.SelectTemplate(templateName);
 	}
 }

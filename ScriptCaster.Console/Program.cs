@@ -1,4 +1,3 @@
-using System.Text;
 using McMaster.Extensions.CommandLineUtils;
 using ScriptCaster.Console;
 using ScriptCaster.Console.CmdControllers;
@@ -11,7 +10,7 @@ using ScriptCaster.Core.Services;
 internal class Program
 {
 	[Argument(0, Name = "TemplateName", Description = "The name of the template we have to work with")]
-	private string? TemplateName { get; } = null;
+	private string? TemplateName { get; set; } = null;
 
 	[Option("-t|--template", Description = "Update the variables files of the template")]
 	private bool TemplateVariableUpdate { get; set; }
@@ -78,13 +77,13 @@ internal class Program
 					Logger.LogError("Need the name of the template to update his variables");
 					return;
 				case true:
-					Worker.UpdateVariables(VariableFile.Template);
+					Worker.UpdateVariables(EVariableFile.Template);
 					break;
 			}
 
 			if (GlobalVariableUpdate)
 			{
-				Worker.UpdateVariables(VariableFile.Global);
+				Worker.UpdateVariables(EVariableFile.Global);
 			}
 
 			return;

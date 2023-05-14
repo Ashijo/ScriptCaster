@@ -57,16 +57,13 @@ public static class MenuCmdController
 			return list.First();
 		}
 
-		if (list.Length == 2)
-		{
-			Logger.Log("Ok, this is weird. I have a problem with 2 choices selection prompts, working on it...");
-			return null;
-		}
+		//for a weird reason Selection Prompt cannot let you choose between 2 choices
+		var trick = list.Append("none")?.ToArray() ?? throw new Exception("should never append");
 
 		return AnsiConsole.Prompt(
 			new SelectionPrompt<string>()
 				.Title("Choose a template :")
-				.PageSize(list.Length)
-				.AddChoices(list));
+				.PageSize(trick.Length)
+				.AddChoices(trick));
 	}
 }

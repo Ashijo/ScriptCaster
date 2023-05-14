@@ -11,20 +11,20 @@ namespace ScriptCaster.Console.CmdControllers;
 */
 public static class SetVariableCmdController
 {
-	private static VariableFile _currentTarget;
+	private static EVariableFile _currentTarget;
 
-	private static readonly Dictionary<VariableFile, SetVariable> SetVariableServices = new()
+	private static readonly Dictionary<EVariableFile, SetVariable> SetVariableServices = new()
 	{
-		{ VariableFile.Global, new SetVariable(Context.GlobalVariablePath) },
-		{ VariableFile.Template, new SetVariable(Context.TemplateVariablePath) }
+		{ EVariableFile.Global, new SetVariable(Context.GlobalVariablePath) },
+		{ EVariableFile.Template, new SetVariable(Context.TemplateVariablePath) }
 	};
 
 	private static string CurrentTargetStr =>
-		_currentTarget == VariableFile.Global ? "global variable file" : "template variable file";
+		_currentTarget == EVariableFile.Global ? "global variable file" : "template variable file";
 
-	public static void LaunchVariableSetting(VariableFile variableFile)
+	public static void LaunchVariableSetting(EVariableFile eVariableFile)
 	{
-		_currentTarget = variableFile;
+		_currentTarget = eVariableFile;
 		ReadInput(OptionsDisplay());
 	}
 
@@ -156,6 +156,6 @@ public static class SetVariableCmdController
 
 	private static void SwitchTarget()
 	{
-		_currentTarget = _currentTarget == VariableFile.Global ? VariableFile.Template : VariableFile.Global;
+		_currentTarget = _currentTarget == EVariableFile.Global ? EVariableFile.Template : EVariableFile.Global;
 	}
 }

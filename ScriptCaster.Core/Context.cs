@@ -8,10 +8,10 @@ public static class Context
 {
 	public static string? TemplatesCollectionPath { get; private set; }
 	public static string? TemplateName { get; private set; }
-	public static string? TemplatePath => $"{TemplatesCollectionPath}/{TemplateName}";
-	public static string? TemplateVariablePath => $"{TemplatePath}/.variables.json";
 	public static string? LocalPath { get; private set; }
-	public static string? GlobalVariablePath => $"{TemplatesCollectionPath}/.variables.json";
+	public static string TemplatePath => $"{TemplatesCollectionPath}/{TemplateName}";
+	public static string TemplateVariablePath => $"{TemplatePath}/.variables.json";
+	public static string GlobalVariablePath => $"{TemplatesCollectionPath}/.variables.json";
 	public static int? RecursionLevel { get; private set; }
 	public static bool Initiated { get; private set; }
 
@@ -51,6 +51,8 @@ public static class Context
 
 	public static RSelectTemplateCallback SelectTemplate(string templateToSelect)
 	{
+		//TODO: Better validation of template name 
+
 		if (!Directory.Exists($"{TemplatesCollectionPath}/{templateToSelect}"))
 		{
 			return new RSelectTemplateCallback(ESelectTemplateCallbackStatus.NotFound);
