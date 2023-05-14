@@ -139,9 +139,8 @@ public static partial class Cast
 	//But also harder to read
 	private static string[] GetAllFiles(string[] templateFolders)
 	{
-		// BUG: Doesn't get de files in the root folder of template
-		
 		var files = new List<string>();
+		files.AddRange(DirectoryHelper.GetAllFilesWithoutConfigs(Context.TemplatePath));
 		foreach (var folderPath in templateFolders)
 		{
 			files.AddRange(DirectoryHelper.GetAllFilesWithoutConfigs(folderPath));
